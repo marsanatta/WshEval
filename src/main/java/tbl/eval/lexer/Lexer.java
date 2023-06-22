@@ -1,6 +1,7 @@
 package tbl.eval.lexer;
 
 import lombok.Getter;
+import tbl.eval.exceptions.InvalidSyntaxException;
 import tbl.eval.exceptions.InvalidTokenException;
 import tbl.eval.number.Number;
 import tbl.eval.number.NumberType;
@@ -126,7 +127,7 @@ public class Lexer {
      */
     private Number parseNumber() throws InvalidTokenException {
         var sb = new StringBuilder();
-        if (curChar != null && curChar == '0') {
+        if (curChar != null && curChar == '0' && peek() != null && Character.isDigit(peek())) {
             buildNumber(sb);
             throw new InvalidTokenException(String.format("Number %s starts with zero", sb));
         }
@@ -187,14 +188,9 @@ public class Lexer {
     }
 
     private Token getMinusToken() {
-        if (peek() != null && peek() == '-' && peek(2) != null && Character.isAlphabetic(peek(2))) {
-            //--var
+        if (peek() != null && peek() == '-') {
             advance(2);
-            return new Token(TokenType.PRE_DECREMENT, "--");
-        } else if (peek() != null && peek() == '-' && curToken != null && curToken.getType() == TokenType.VAR) {
-            //var--
-            advance(2);
-            return new Token(TokenType.POST_DECREMENT, "++");
+            return new Token(TokenType.DOUBLE_MINUS, "--");
         } else {
             advance();
             return new Token(TokenType.MINUS, "-");
@@ -202,14 +198,9 @@ public class Lexer {
     }
 
     private Token getPlusToken() {
-        if (peek() != null && peek() == '+' && peek(2) != null && Character.isAlphabetic(peek(2))) {
-            //++var
+        if (peek() != null && peek() == '+') {
             advance(2);
-            return new Token(TokenType.PRE_INCREMENT, "++");
-        } else if (peek() != null && peek() == '+' && curToken.getType() == TokenType.VAR) {
-            //var++
-            advance(2);
-            return new Token(TokenType.POST_INCREMENT, "++");
+            return new Token(TokenType.DOUBLE_PLUS, "++");
         } else {
             advance();
             return new Token(TokenType.PLUS, "+");
@@ -221,7 +212,7 @@ public class Lexer {
      *
      * @return Token
      */
-    public Token getToken() throws InvalidTokenException {
+    public Token getToken() throws InvalidTokenException, InvalidSyntaxException {
         Token token;
         while (curChar != null) {
             if (Character.isWhitespace(curChar)) {

@@ -109,6 +109,17 @@ public class Interpreter implements TreeVisitor {
         return node.getNumber();
     }
 
+    private Number getNewVarValue(Token op, Number varValue) {
+        switch (op.getType()) {
+            case DOUBLE_PLUS:
+                return varValue.add(new Number(NumberType.LONG, 1L));
+            case DOUBLE_MINUS:
+                return varValue.subtract(new Number(NumberType.LONG, 1L));
+            default:
+                throw new UnknownTokenTypeException("Unknown unary increment/decrement token type:" + op.getType());
+        }
+    }
+
     @Override
     public Number visitVarNode(VarNode varNode) throws UnknownVariableException {
         String varName = varNode.getVarName();
@@ -116,32 +127,12 @@ public class Interpreter implements TreeVisitor {
         Number evalValue = varValue;
         if (varNode.getPreIncrDecrToken().isPresent()) {
             Token op = varNode.getPreIncrDecrToken().get();
-            Number newVarValue = null;
-            switch (op.getType()) {
-                case PRE_INCREMENT:
-                    newVarValue = varValue.add(new Number(NumberType.LONG, 1L));
-                    break;
-                case PRE_DECREMENT:
-                    newVarValue = varValue.subtract(new Number(NumberType.LONG, 1L));
-                    break;
-                default:
-                    throw new UnknownTokenTypeException("Unknown pre increment/decrement token type:" + op.getType());
-            }
+            Number newVarValue = getNewVarValue(op, varValue);
             varStore.set(varName, newVarValue);
             evalValue = newVarValue; // eval value need to be new variable value
         } else if (varNode.getPostIncrDecrToken().isPresent()) {
             Token op = varNode.getPostIncrDecrToken().get();
-            Number newVarValue = null;
-            switch (op.getType()) {
-                case POST_INCREMENT:
-                    newVarValue = varValue.add(new Number(NumberType.LONG, 1L));
-                    break;
-                case POST_DECREMENT:
-                    newVarValue = varValue.subtract(new Number(NumberType.LONG, 1L));
-                    break;
-                default:
-                    throw new UnknownTokenTypeException("Unknown pre increment/decrement token type:" + op.getType());
-            }
+            Number newVarValue = getNewVarValue(op, varValue);
             varStore.set(varName, newVarValue);
         }
         return evalValue;

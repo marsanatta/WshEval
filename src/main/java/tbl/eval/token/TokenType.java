@@ -3,11 +3,9 @@ package tbl.eval.token;
 public enum TokenType {
     NUM, // number
     PLUS, // +
-    PRE_INCREMENT, // ++ before variable
-    POST_INCREMENT, // ++ after variable
+    DOUBLE_PLUS, // ++
     MINUS, // -
-    PRE_DECREMENT, // -- before variable
-    POST_DECREMENT, // -- after variable
+    DOUBLE_MINUS, // --
     MUL, // *
     DIV, // /
     REM, // %

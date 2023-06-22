@@ -23,8 +23,9 @@ public class Parser {
             TokenType.SUB_ASSIGN, TokenType.MUL_ASSIGN, TokenType.DIV_ASSIGN, TokenType.REM_ASSIGN);
     private static final Set<TokenType> TOKEN_TYPE_EXPR_OP_SET = Set.of(TokenType.PLUS, TokenType.MINUS);
     private static final Set<TokenType> TOKEN_TYPE_TERM_OP_SET = Set.of(TokenType.MUL, TokenType.DIV, TokenType.REM);
-    private static final Set<TokenType> TOKEN_TYPE_PRE_INCR_DECR_SET = Set.of(TokenType.PRE_INCREMENT, TokenType.PRE_DECREMENT);
-    private static final Set<TokenType> TOKEN_TYPE_POST_INCR_DECR_SET = Set.of(TokenType.POST_INCREMENT, TokenType.POST_DECREMENT);
+    private static final Set<TokenType> TOKEN_TYPE_UNARY_INCR_DECR_SET = Set.of(TokenType.DOUBLE_PLUS, TokenType.DOUBLE_MINUS);
+    //private static final Set<TokenType> TOKEN_TYPE_PRE_INCR_DECR_SET = Set.of(TokenType.PRE_INCREMENT, TokenType.PRE_DECREMENT);
+    //private static final Set<TokenType> TOKEN_TYPE_POST_INCR_DECR_SET = Set.of(TokenType.POST_INCREMENT, TokenType.POST_DECREMENT);
 
     private final Lexer lexer;
     private Token curToken;
@@ -155,8 +156,8 @@ public class Parser {
                 eat(TokenType.RPAREN);
                 return node;
             case VAR:
-            case PRE_INCREMENT:
-            case PRE_DECREMENT:
+            case DOUBLE_PLUS:
+            case DOUBLE_MINUS:
                 return parseVariable();
             default:
                 throw new InvalidSyntaxException(String.format("Encounter invalid token %s while parsing. Expect a factor", curToken));
@@ -172,7 +173,7 @@ public class Parser {
     public TreeNode parse() throws InvalidTokenException, InvalidSyntaxException {
         this.curToken = lexer.getToken(); // set initial token
         boolean isAssignExpr =
-                (TOKEN_TYPE_PRE_INCR_DECR_SET.contains(curToken.getType()) || curToken.getType() == TokenType.VAR)
+                (TOKEN_TYPE_UNARY_INCR_DECR_SET.contains(curToken.getType()) || curToken.getType() == TokenType.VAR)
                 && lexer.getText().contains("=");
         TreeNode root;
         if (isAssignExpr) {
@@ -197,9 +198,9 @@ public class Parser {
         VarNode.VarNodeBuilder varNodeBuilder = VarNode.builder();
         // parse pre-increment/decrement operator
         Token preIncrDecrToken = null;
-        if (TOKEN_TYPE_PRE_INCR_DECR_SET.contains(curToken.getType())) {
+        if (TOKEN_TYPE_UNARY_INCR_DECR_SET.contains(curToken.getType())) {
             preIncrDecrToken = curToken;
-            eat(TOKEN_TYPE_PRE_INCR_DECR_SET);
+            eat(TOKEN_TYPE_UNARY_INCR_DECR_SET);
             varNodeBuilder.preIncrDecrToken(Optional.of(preIncrDecrToken));
         }
         // parser variable
@@ -209,12 +210,12 @@ public class Parser {
                 .varName((String)varToken.getValue());
 
         // parse post-increment/decrement operator
-        if (TOKEN_TYPE_POST_INCR_DECR_SET.contains(curToken.getType())) {
+        if (TOKEN_TYPE_UNARY_INCR_DECR_SET.contains(curToken.getType())) {
             if (preIncrDecrToken != null) {
                 throw new InvalidSyntaxException("Variable " + varToken + " have both pre and post increment/decrement operator");
             }
             Token postIncrDecrToken = curToken;
-            eat(TOKEN_TYPE_POST_INCR_DECR_SET);
+            eat(TOKEN_TYPE_UNARY_INCR_DECR_SET);
             varNodeBuilder.postIncrDecrToken(Optional.of(postIncrDecrToken));
         }
         return varNodeBuilder.build();
