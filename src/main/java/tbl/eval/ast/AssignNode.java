@@ -1,31 +1,17 @@
 package tbl.eval.ast;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import tbl.eval.token.Token;
 import tbl.eval.number.Number;
 
+@Getter
+@AllArgsConstructor
 public class AssignNode implements TreeNode {
 
-    private TreeNode left;
-    private Token op; // =, +=, -=, *=, /=, %=
-    private TreeNode right;
-
-    public AssignNode(TreeNode left, Token op, TreeNode right) {
-        this.left = left;
-        this.op = op;
-        this.right = right;
-    }
-
-    public TreeNode getLeft() {
-        return left;
-    }
-
-    public Token getOp() {
-        return op;
-    }
-
-    public TreeNode getRight() {
-        return right;
-    }
+    private final TreeNode left;
+    private final Token op; // =, +=, -=, *=, /=, %=
+    private final TreeNode right;
 
     @Override
     public Number accept(TreeVisitor visitor) {

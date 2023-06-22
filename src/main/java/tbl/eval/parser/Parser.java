@@ -190,30 +190,37 @@ public class Parser {
     }
 
     /**
-     * Parse tokens to generate a variable node
+     * Parse tokens to generate a variable node.
+     * Variable node can have pre/post-increment/decrement operators
      * @return A variable node
      * @throws InvalidTokenException input has invalid token
      * @throws InvalidSyntaxException input has invalid syntax
      */
     private TreeNode parseVariable() throws InvalidTokenException, InvalidSyntaxException {
+        VarNode.VarNodeBuilder varNodeBuilder = VarNode.builder();
+        // parse pre-increment/decrement operator
         Token preIncrDecrToken = null;
         if (TOKEN_TYPE_PRE_INCR_DECR_SET.contains(curToken.getType())) {
             preIncrDecrToken = curToken;
             eat(TOKEN_TYPE_PRE_INCR_DECR_SET);
+            varNodeBuilder.preIncrDecrToken(preIncrDecrToken);
         }
+        // parser variable
         Token varToken = eat(TokenType.VAR);
-        VarNode varNode = new VarNode(varToken, (String)varToken.getValue());
-        varNode.setPreIncrDecrToken(preIncrDecrToken);
+        varNodeBuilder
+                .varToken(varToken)
+                .varName((String)varToken.getValue());
 
+        // parse post-increment/decrement operator
         if (TOKEN_TYPE_POST_INCR_DECR_SET.contains(curToken.getType())) {
             if (preIncrDecrToken != null) {
-                throw new InvalidSyntaxException("Variable " + varNode.getVarToken() + " have both pre and post increment/decrement operator");
+                throw new InvalidSyntaxException("Variable " + varToken + " have both pre and post increment/decrement operator");
             }
             Token postIncrDecrToken = curToken;
             eat(TOKEN_TYPE_POST_INCR_DECR_SET);
-            varNode.setPostIncrDecrToken(postIncrDecrToken);
+            varNodeBuilder.postIncrDecrToken(postIncrDecrToken);
         }
-        return varNode;
+        return varNodeBuilder.build();
     }
 
 }

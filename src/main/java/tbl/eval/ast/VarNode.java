@@ -1,45 +1,24 @@
 package tbl.eval.ast;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 import tbl.eval.token.Token;
 import tbl.eval.number.Number;
 
 /**
  * Variable Node
  */
+@Getter
+@Builder
 public class VarNode implements TreeNode {
-    private Token varToken;
-    private String varName;
+    @NonNull
+    private final Token varToken;
+    @NonNull
+    private final String varName;
     private Token preIncrDecrToken;
     private Token postIncrDecrToken;
-
-    public VarNode(Token varToken, String varName) {
-        this.varToken = varToken;
-        this.varName = varName;
-    }
-
-    public Token getVarToken() {
-        return varToken;
-    }
-
-    public String getVarName() {
-        return varName;
-    }
-
-    public Token getPreIncrDecrToken() {
-        return preIncrDecrToken;
-    }
-
-    public Token getPostIncrDecrToken() {
-        return postIncrDecrToken;
-    }
-
-    public void setPreIncrDecrToken(Token preIncrDecrToken) {
-        this.preIncrDecrToken = preIncrDecrToken;
-    }
-
-    public void setPostIncrDecrToken(Token postIncrDecrToken) {
-        this.postIncrDecrToken = postIncrDecrToken;
-    }
 
     @Override
     public Number accept(TreeVisitor visitor) {

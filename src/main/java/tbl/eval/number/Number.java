@@ -1,15 +1,16 @@
 package tbl.eval.number;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.math.BigDecimal;
 import java.util.Optional;
 
+@Getter
+@AllArgsConstructor
 public class Number {
     private NumberType type;
     private Object value;
-
-    public Number(NumberType type, Object value) {
-        this.value = value;
-    }
 
     public NumberType getType() {
         return type;
