@@ -1,5 +1,6 @@
 package tbl.eval.lexer;
 
+import lombok.Getter;
 import tbl.eval.exceptions.InvalidTokenException;
 import tbl.eval.number.Number;
 import tbl.eval.number.NumberType;
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
  * Lexer process the input string to generate Tokens
  * which is the basic processing unit of the Parser
  */
+@Getter
 public class Lexer {
     private static final BigDecimal BIG_DECIMAL_MAX_DOUBLE = BigDecimal.valueOf(Double.MAX_VALUE);
     private static final BigDecimal BIG_DECIMAL_MIN_DOUBLE = BigDecimal.valueOf(Double.MIN_VALUE);
@@ -37,10 +39,15 @@ public class Lexer {
      */
     private Token curToken;
 
-    public Lexer(String text) {
+    /**
+     * Start to consume the input text
+     * @param text input text
+     */
+    public void consume(String text) {
         this.text = text;
         pos = 0;
-        curChar = this.text.charAt(pos);
+        if (this.text.length() > 0)
+            curChar = this.text.charAt(pos);
     }
 
     /**
@@ -66,19 +73,6 @@ public class Lexer {
      */
     private void advance() {
         advance(1);
-    }
-
-    /**
-     * Peek the previous character of the current character
-     * @return character
-     */
-    private Character prev() {
-        int peekPos = pos - 1;
-        if (peekPos < 0) {
-            return null;
-        } else {
-            return text.charAt(peekPos);
-        }
     }
 
     /**
@@ -111,31 +105,46 @@ public class Lexer {
         }
     }
 
-    private void fetchRestNumberString(StringBuilder sb) {
+    /**
+     * Builder number start from current position
+     * @param sb string builder
+     */
+    private void buildNumber(StringBuilder sb) {
         int i = pos;
-        while (i < text.length() && Character.isDigit(text.charAt(i)) ||text.charAt(i) == '.') {
+        while (i < text.length() && (Character.isDigit(text.charAt(i)) ||text.charAt(i) == '.' || isScientificNotion(text.charAt(i)))) {
             sb.append(text.charAt(i));
             i++;
         }
+    }
+
+    private boolean isScientificNotion(char c) {
+        return c == 'e' || c == 'E';
     }
 
     /**
      * Parse a Number
      */
     private Number parseNumber() throws InvalidTokenException {
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
         if (curChar != null && curChar == '0') {
-            fetchRestNumberString(sb);
-            throw new InvalidTokenException("Number " + sb + " starts with zero");
+            buildNumber(sb);
+            throw new InvalidTokenException(String.format("Number %s starts with zero", sb));
         }
 
         int dotCnt = 0;
-        while (curChar != null && (Character.isDigit(curChar) || curChar == '.')) {
+        int eCnt = 0;
+        while (curChar != null && (Character.isDigit(curChar) || curChar == '.' || isScientificNotion(curChar))) {
             if (curChar == '.') {
                 dotCnt++;
                 if (dotCnt >= 2) {
-                    fetchRestNumberString(sb);
-                    throw new InvalidTokenException("Number " + sb + " has multiple decimal points");
+                    buildNumber(sb);
+                    throw new InvalidTokenException(String.format("Number %s has multiple decimal points", sb));
+                }
+            } else if (isScientificNotion(curChar)) {
+                eCnt++;
+                if (eCnt >= 2) {
+                    buildNumber(sb);
+                    throw new InvalidTokenException(String.format("Number %s has multiple scientific notion", sb));
                 }
             }
             sb.append(curChar);
@@ -208,12 +217,12 @@ public class Lexer {
     }
 
     /**
-     * Do lexical analysis and return the next Token
+     * Do lexical analysis to retrieve the next Token
      *
      * @return Token
      */
     public Token getToken() throws InvalidTokenException {
-        Token token = null;
+        Token token;
         while (curChar != null) {
             if (Character.isWhitespace(curChar)) {
                 skipWhitespace();

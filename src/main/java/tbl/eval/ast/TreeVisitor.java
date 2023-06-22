@@ -1,18 +1,19 @@
 package tbl.eval.ast;
 
+import tbl.eval.exceptions.UnknownVariableException;
 import tbl.eval.number.Number;
 
 /**
  * Visitor of abstract syntax tree
  */
 public interface TreeVisitor {
-    Number visitBinaryOp(BinaryOpNode node);
+    Number visitBinaryOpNode(BinaryOpNode node) throws UnknownVariableException;
 
-    Number visitUnaryOp(UnaryOpNode node);
+    Number visitUnaryOpNode(UnaryOpNode node) throws UnknownVariableException;
 
-    Number visitNumber(NumberNode node);
+    Number visitNumberNode(NumberNode node);
 
-    Number visitVar(VarNode varNode);
+    Number visitVarNode(VarNode varNode) throws UnknownVariableException;
 
-    Number visitAssign(AssignNode assignNode);
+    Number visitAssignOpNode(AssignOpNode assignOpNode) throws UnknownVariableException;
 }

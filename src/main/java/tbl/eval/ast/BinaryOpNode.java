@@ -1,22 +1,27 @@
 package tbl.eval.ast;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
+import tbl.eval.exceptions.UnknownVariableException;
 import tbl.eval.token.Token;
 import tbl.eval.number.Number;
 
 /**
- * Binary operator node (+,-,*,/)
+ * Binary operator node (+,-,*,/,%)
  */
 @Getter
-@AllArgsConstructor
+@Builder
 public class BinaryOpNode implements TreeNode {
-    private final TreeNode left;
-    private final Token op;
 
+    @NonNull
+    private final TreeNode left;
+    @NonNull
+    private final Token op;
+    @NonNull
     private final TreeNode right;
     @Override
-    public Number accept(TreeVisitor visitor) {
-        return visitor.visitBinaryOp(this);
+    public Number accept(TreeVisitor visitor) throws UnknownVariableException {
+        return visitor.visitBinaryOpNode(this);
     }
 }

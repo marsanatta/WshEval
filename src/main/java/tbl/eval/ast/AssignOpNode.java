@@ -8,19 +8,21 @@ import tbl.eval.token.Token;
 import tbl.eval.number.Number;
 
 /**
- * Unary Operation Node (+, -, ++, --)
+ * Assign operator node (=,+=,-=,*=,/=,%=)
  */
 @Getter
 @Builder
-@NonNull
-public class UnaryOpNode implements TreeNode {
+public class AssignOpNode implements TreeNode {
+
+    @NonNull
+    private final VarNode left;
     @NonNull
     private final Token op;
     @NonNull
-    private final TreeNode expr;
+    private final TreeNode right;
 
     @Override
     public Number accept(TreeVisitor visitor) throws UnknownVariableException {
-        return visitor.visitUnaryOpNode(this);
+        return visitor.visitAssignOpNode(this);
     }
 }

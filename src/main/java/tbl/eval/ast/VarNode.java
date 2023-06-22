@@ -3,9 +3,11 @@ package tbl.eval.ast;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
+import tbl.eval.exceptions.UnknownVariableException;
 import tbl.eval.token.Token;
 import tbl.eval.number.Number;
+
+import java.util.Optional;
 
 /**
  * Variable Node
@@ -14,14 +16,16 @@ import tbl.eval.number.Number;
 @Builder
 public class VarNode implements TreeNode {
     @NonNull
-    private final Token varToken;
+    private final Token token;
     @NonNull
     private final String varName;
-    private Token preIncrDecrToken;
-    private Token postIncrDecrToken;
+    @Builder.Default
+    private Optional<Token> preIncrDecrToken = Optional.empty();
+    @Builder.Default
+    private Optional<Token> postIncrDecrToken = Optional.empty();
 
     @Override
-    public Number accept(TreeVisitor visitor) {
-        return visitor.visitVar(this);
+    public Number accept(TreeVisitor visitor) throws UnknownVariableException {
+        return visitor.visitVarNode(this);
     }
 }
