@@ -1,9 +1,9 @@
 package tbl.eval.parser;
 
+import tbl.eval.ast.TreeNode;
 import tbl.eval.ast.AssignOpNode;
 import tbl.eval.ast.BinaryOpNode;
 import tbl.eval.ast.NumberNode;
-import tbl.eval.ast.TreeNode;
 import tbl.eval.ast.UnaryOpNode;
 import tbl.eval.ast.VarNode;
 import tbl.eval.exceptions.InvalidSyntaxException;

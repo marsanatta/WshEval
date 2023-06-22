@@ -1,8 +1,8 @@
 package tbl.eval.number;
 
+import tbl.eval.exceptions.UnknownNumberTypeException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import tbl.eval.exceptions.UnknownNumberTypeException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
