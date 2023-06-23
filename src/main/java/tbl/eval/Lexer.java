@@ -192,20 +192,20 @@ public class Lexer {
     private Token getMinusToken() {
         if (peek() != null && peek() == '-') {
             advance(2);
-            return new Token(TokenType.DOUBLE_MINUS, "--");
+            return Token.builder().type(TokenType.DOUBLE_MINUS).build();
         } else {
             advance();
-            return new Token(TokenType.MINUS, "-");
+            return Token.builder().type(TokenType.MINUS).build();
         }
     }
 
     private Token getPlusToken() {
         if (peek() != null && peek() == '+') {
             advance(2);
-            return new Token(TokenType.DOUBLE_PLUS, "++");
+            return Token.builder().type(TokenType.DOUBLE_PLUS).build();
         } else {
             advance();
-            return new Token(TokenType.PLUS, "+");
+            return Token.builder().type(TokenType.PLUS).build();
         }
     }
 
@@ -221,53 +221,53 @@ public class Lexer {
                 skipWhitespace();
                 continue;
             } else if (Character.isAlphabetic(curChar)) {
-                token = new Token(TokenType.VAR, parseVariable());
+                token = Token.builder().type(TokenType.VAR).value(parseVariable()).build();
             } else if (Character.isDigit(curChar)) {
-                token = new Token(TokenType.NUM, parseNumber());
+                token = Token.builder().type(TokenType.NUM).value(parseNumber()).build();
             } else if (curChar == '+' && peek() != null && peek() == '=') {
                 advance(2);
-                token = new Token(TokenType.ADD_ASSIGN, "+=");
+                token = Token.builder().type(TokenType.ADD_ASSIGN).build();
             } else if (curChar == '-' && peek() != null && peek() == '=') {
                 advance(2);
-                token = new Token(TokenType.SUB_ASSIGN, "-=");
+                token = Token.builder().type(TokenType.SUB_ASSIGN).build();
             } else if (curChar == '*' && peek() != null && peek() == '=') {
                 advance(2);
-                token = new Token(TokenType.MUL_ASSIGN, "*=");
+                token = Token.builder().type(TokenType.MUL_ASSIGN).build();
             } else if (curChar == '/' && peek() != null && peek() == '=') {
                 advance(2);
-                token = new Token(TokenType.DIV_ASSIGN, "/=");
+                token = Token.builder().type(TokenType.DIV_ASSIGN).build();
             } else if (curChar == '%' && peek() != null && peek() == '=') {
                 advance(2);
-                token = new Token(TokenType.REM_ASSIGN, "%=");
+                token = Token.builder().type(TokenType.REM_ASSIGN).build();
             } else if (curChar == '=') {
                 advance();
-                token = new Token(TokenType.ASSIGN, "=");
+                token = Token.builder().type(TokenType.ASSIGN).build();
             } else if (curChar == '+') {
                 token = getPlusToken();
             } else if (curChar == '-') {
                 token = getMinusToken();
             } else if (curChar == '*') {
                 advance();
-                token = new Token(TokenType.MUL, "*");
+                token = Token.builder().type(TokenType.MUL).build();
             } else if (curChar == '/') {
                 advance();
-                token = new Token(TokenType.DIV, "/");
+                token = Token.builder().type(TokenType.DIV).build();
             } else if (curChar == '%') {
                 advance();
-                token = new Token(TokenType.REM, "%");
+                token = Token.builder().type(TokenType.REM).build();
             } else if (curChar == '(') {
                 advance();
-                token = new Token(TokenType.LPAREN, "(");
+                token = Token.builder().type(TokenType.LPAREN).build();
             } else if (curChar == ')') {
                 advance();
-                token = new Token(TokenType.RPAREN, ")");
+                token = Token.builder().type(TokenType.RPAREN).build();
             } else {
                 throw new InvalidTokenException("Invalid character: " + curChar);
             }
             curToken = token;
             return token;
         }
-        return new Token(TokenType.EOF, null);
+        return Token.builder().type(TokenType.EOF).build();
     }
 
 }

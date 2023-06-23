@@ -1,5 +1,6 @@
 package tbl.eval.number;
 
+import lombok.NonNull;
 import tbl.eval.exceptions.UnknownNumberTypeException;
 import lombok.Getter;
 
@@ -12,7 +13,7 @@ public class Number {
 
     private final NumberType type;
     private final java.lang.Number value;
-    public Number(NumberType type, java.lang.Number value) {
+    public Number(@NonNull NumberType type, @NonNull java.lang.Number value) {
         this.type = type;
         this.value = value;
 
@@ -33,7 +34,7 @@ public class Number {
         return value;
     }
 
-    public Long longValue() {
+    public long longValue() {
         if (type == NumberType.LONG) {
             return (Long)value;
         } else {
@@ -41,7 +42,7 @@ public class Number {
         }
     }
 
-    public Double doubleValue() {
+    public double doubleValue() {
         if (type == NumberType.DOUBLE) {
             return (Double) value;
         } else {
@@ -173,4 +174,15 @@ public class Number {
     public String toString() {
         return String.format("%s(%s)", value.toString(), type);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Number) {
+            Number another = (Number)obj;
+            return type.equals(another.getType()) && value.equals(another.getValue());
+        } else {
+            return false;
+        }
+    }
+
 }

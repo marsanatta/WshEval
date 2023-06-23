@@ -157,8 +157,8 @@ public class Parser {
                 eat(TokenType.RPAREN);
                 return node;
             case VAR:
-            case DOUBLE_PLUS:
-            case DOUBLE_MINUS:
+            case DOUBLE_PLUS: // pre increment
+            case DOUBLE_MINUS: // pre decrement
                 return parseVariable();
             default:
                 throw new InvalidSyntaxException(String.format("Encounter invalid token %s while parsing. Expect a factor", curToken));
