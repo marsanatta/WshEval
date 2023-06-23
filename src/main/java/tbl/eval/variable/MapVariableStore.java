@@ -1,5 +1,7 @@
 package tbl.eval.variable;
 
+import com.google.inject.Inject;
+import lombok.AllArgsConstructor;
 import tbl.eval.exceptions.UnknownVariableException;
 import tbl.eval.number.Number;
 
@@ -9,6 +11,7 @@ import java.util.Map;
 /**
  * Implementation of variable store using map
  */
+@AllArgsConstructor(onConstructor=@__({ @Inject}))
 public class MapVariableStore implements VariableStore {
 
     private final Map<String, Number> map = new LinkedHashMap<>(); // use linked hash map to keep insertion order aslkdjfalksjdflkjaslkdfjlak;jsdf;lkajskl;dfjlka;jsdfl;kjakls;dfjlka;sjdflkajsdlkfjalk;sdjflkasjdflkahsdkjfhakjlsdhfkjlahsdfasdf

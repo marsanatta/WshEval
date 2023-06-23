@@ -1,5 +1,7 @@
-package tbl.eval.interpreter;
+package tbl.eval;
 
+import lombok.Builder;
+import lombok.Getter;
 import tbl.eval.ast.AssignOpNode;
 import tbl.eval.ast.BinaryOpNode;
 import tbl.eval.ast.NumberNode;
@@ -9,10 +11,8 @@ import tbl.eval.ast.UnaryOpNode;
 import tbl.eval.ast.VarNode;
 import tbl.eval.exceptions.InvalidSyntaxException;
 import tbl.eval.exceptions.UnknownTokenTypeException;
-import tbl.eval.lexer.Lexer;
 import tbl.eval.number.Number;
 import tbl.eval.number.NumberType;
-import tbl.eval.parser.Parser;
 import tbl.eval.token.Token;
 import tbl.eval.variable.VariableStore;
 import lombok.NonNull;
@@ -23,14 +23,17 @@ import tbl.eval.exceptions.UnknownVariableException;
  * Interpreter interprets the Abstracted Syntax Tree (AST) generated from the Parser
  * It implements TreeVisitor methods for AST node
  */
+@Builder
+@Getter
 public class Interpreter implements TreeVisitor {
 
     @NonNull
     private final Lexer lexer;
-
     @NonNull
     private final Parser parser;
+    @NonNull
     private VariableStore varStore;
+
     public Interpreter(@NonNull Lexer lexer, @NonNull Parser parser, @NonNull VariableStore varStore) {
         this.lexer = lexer;
         this.parser = parser;
@@ -77,7 +80,7 @@ public class Interpreter implements TreeVisitor {
         String varName = assignOpNode.getLeft().getVarName();
         Token op = assignOpNode.getOp();
         Number rightExpr = assignOpNode.getRight().accept(this);
-        Number newVarValue = null;
+        Number newVarValue;
         switch (op.getType()) {
             case ASSIGN:
                 newVarValue = rightExpr;

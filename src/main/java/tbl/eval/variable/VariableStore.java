@@ -22,12 +22,6 @@ public interface VariableStore {
     void set(String varName, Number value);
 
     /**
-     * String representation of the store
-     * @return string
-     */
-    String toString();
-
-    /**
      * Remove all stored variables
      */
     void clean();

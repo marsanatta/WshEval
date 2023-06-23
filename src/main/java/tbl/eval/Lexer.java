@@ -1,7 +1,6 @@
-package tbl.eval.lexer;
+package tbl.eval;
 
 import lombok.Getter;
-import tbl.eval.exceptions.InvalidSyntaxException;
 import tbl.eval.exceptions.InvalidTokenException;
 import tbl.eval.number.Number;
 import tbl.eval.number.NumberType;
@@ -47,8 +46,9 @@ public class Lexer {
     public void consume(String text) {
         this.text = text;
         pos = 0;
-        if (this.text.length() > 0)
+        if (this.text.length() > 0) {
             curChar = this.text.charAt(pos);
+        }
     }
 
     /**
@@ -77,24 +77,16 @@ public class Lexer {
     }
 
     /**
-     * Peek the next character with given distance from the current character
+     * Peek the next character of current character
      * @return character
      */
-    private Character peek(int distance) {
-        int peekPos = pos + distance;
+    private Character peek() {
+        int peekPos = pos + 1;
         if (peekPos > text.length() - 1) {
             return null;
         } else {
             return text.charAt(peekPos);
         }
-    }
-
-    /**
-     * Peek the next character of current character
-     * @return character
-     */
-    private Character peek() {
-        return peek(1);
     }
 
     /**
@@ -114,6 +106,11 @@ public class Lexer {
         int i = pos;
         while (i < text.length() && (Character.isDigit(text.charAt(i)) ||text.charAt(i) == '.' || isScientificNotion(text.charAt(i)))) {
             sb.append(text.charAt(i));
+            // handle negative scientific notion
+            if (isScientificNotion(text.charAt(i)) && i+1 < text.length() && text.charAt(i+1) == '-') {
+                sb.append(text.charAt(i+1));
+                i++;
+            }
             i++;
         }
     }
@@ -149,6 +146,11 @@ public class Lexer {
                 }
             }
             sb.append(curChar);
+            // handle negative scientific notion
+            if (isScientificNotion(curChar) && peek() != null && peek() == '-') {
+                sb.append(peek());
+                advance();
+            }
             advance();
         }
 
@@ -212,7 +214,7 @@ public class Lexer {
      *
      * @return Token
      */
-    public Token getToken() throws InvalidTokenException, InvalidSyntaxException {
+    public Token getToken() throws InvalidTokenException {
         Token token;
         while (curChar != null) {
             if (Character.isWhitespace(curChar)) {

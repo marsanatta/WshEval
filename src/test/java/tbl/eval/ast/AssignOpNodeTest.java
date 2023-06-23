@@ -40,7 +40,6 @@ public class AssignOpNodeTest {
     public void testAccept() throws Exception {
         Number number = node.accept(visitor);
         assertNotNull(number);
-        int a = 0;
     }
 
 

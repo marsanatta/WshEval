@@ -1,11 +1,10 @@
 package tbl.eval;
 
-import tbl.eval.lexer.Lexer;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import tbl.eval.module.InterpreterModule;
 import tbl.eval.number.Number;
-import tbl.eval.parser.Parser;
-import tbl.eval.variable.MapVariableStore;
 import tbl.eval.variable.VariableStore;
-import tbl.eval.interpreter.Interpreter;
 
 import java.util.Scanner;
 
@@ -23,21 +22,21 @@ public class Main {
     public static final String COMMAND_EXIT = "exit";
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Lexer lexer = new Lexer();
-        Parser parser = new Parser(lexer);
-        VariableStore variableStore = new MapVariableStore();
-        Interpreter interpreter = new Interpreter(lexer, parser, variableStore);
-        try {
+        try (Scanner scanner = new Scanner(System.in)) {
+            Injector injector = Guice.createInjector(new InterpreterModule());
+            Interpreter interpreter = injector.getInstance(Interpreter.class);
+            VariableStore varStore = interpreter.getVarStore();
+            System.out.println("Please enter the expression here. The result of evaluation will be output after press enter");
+            System.out.println("Commands:\n - vars: print variables\n - clean: remove all stored variables\n - exit: exit the program");
             while (true) {
                 String text = scanner.nextLine();
                 if (text.equals(COMMAND_EXIT)) {
                     System.out.println("Good bye!");
                     break;
                 } else if (text.equals(COMMAND_PRINT_VARS)) {
-                    System.out.println(variableStore);
+                    System.out.println(varStore);
                 } else if (text.equals(COMMAND_CLEAN_VARS)) {
-                    variableStore.clean();
+                    varStore.clean();
                     System.out.println("Variables are clean up");
                 } else {
                     try {
@@ -51,8 +50,6 @@ public class Main {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            scanner.close();
         }
     }
 }

@@ -1,5 +1,6 @@
-package tbl.eval.parser;
+package tbl.eval;
 
+import lombok.NonNull;
 import tbl.eval.ast.TreeNode;
 import tbl.eval.ast.AssignOpNode;
 import tbl.eval.ast.BinaryOpNode;
@@ -8,7 +9,6 @@ import tbl.eval.ast.UnaryOpNode;
 import tbl.eval.ast.VarNode;
 import tbl.eval.exceptions.InvalidSyntaxException;
 import tbl.eval.exceptions.InvalidTokenException;
-import tbl.eval.lexer.Lexer;
 import tbl.eval.token.Token;
 import tbl.eval.token.TokenType;
 
@@ -29,7 +29,8 @@ public class Parser {
 
     private final Lexer lexer;
     private Token curToken;
-    public Parser(Lexer lexer) {
+
+    public Parser(@NonNull Lexer lexer) {
         this.lexer = lexer;
     }
 
