@@ -17,7 +17,7 @@ import tbl.eval.token.Token;
 import tbl.eval.variable.VariableStore;
 import lombok.NonNull;
 import tbl.eval.exceptions.InvalidTokenException;
-import tbl.eval.exceptions.UnknownVariableException;
+import tbl.eval.exceptions.VariableNotFoundException;
 
 /**
  * Interpreter interprets the Abstracted Syntax Tree (AST) generated from the Parser
@@ -41,7 +41,7 @@ public class Interpreter implements TreeVisitor {
     }
 
     @Override
-    public Number visitBinaryOpNode(BinaryOpNode node) throws UnknownVariableException {
+    public Number visitBinaryOpNode(BinaryOpNode node) throws VariableNotFoundException {
         Number left = node.getLeft().accept(this);
         Token op = node.getOp();
         Number right = node.getRight().accept(this);
@@ -62,7 +62,7 @@ public class Interpreter implements TreeVisitor {
     }
 
     @Override
-    public Number visitUnaryOpNode(UnaryOpNode node) throws UnknownVariableException {
+    public Number visitUnaryOpNode(UnaryOpNode node) throws VariableNotFoundException {
         Token op = node.getOp();
         switch (op.getType()) {
             case PLUS:
@@ -76,7 +76,7 @@ public class Interpreter implements TreeVisitor {
     }
 
     @Override
-    public Number visitAssignOpNode(AssignOpNode assignOpNode) throws UnknownVariableException {
+    public Number visitAssignOpNode(AssignOpNode assignOpNode) throws VariableNotFoundException {
         String varName = assignOpNode.getLeft().getVarName();
         Token op = assignOpNode.getOp();
         Number rightExpr = assignOpNode.getRight().accept(this);
@@ -124,7 +124,7 @@ public class Interpreter implements TreeVisitor {
     }
 
     @Override
-    public Number visitVarNode(VarNode varNode) throws UnknownVariableException {
+    public Number visitVarNode(VarNode varNode) throws VariableNotFoundException {
         String varName = varNode.getVarName();
         Number varValue = varStore.get(varName);
         Number evalValue = varValue;
@@ -141,7 +141,7 @@ public class Interpreter implements TreeVisitor {
         return evalValue;
     }
 
-    public Number interpret(String text) throws InvalidTokenException, InvalidSyntaxException, UnknownVariableException {
+    public Number interpret(String text) throws InvalidTokenException, InvalidSyntaxException, VariableNotFoundException {
         lexer.consume(text);
         TreeNode root = parser.parse();
         if (root == null)

@@ -1,17 +1,29 @@
 package tbl.eval.number;
 
 import tbl.eval.exceptions.UnknownNumberTypeException;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Getter
-@AllArgsConstructor
 public class Number {
-    private NumberType type;
-    private Object value;
+    private static final String NUMBER_INCONSISTENT_TYPE_VALUE_ERROR_MSG = "Number value is not consistent with the given type";
+
+    private final NumberType type;
+    private final java.lang.Number value;
+    public Number(NumberType type, java.lang.Number value) {
+        this.type = type;
+        this.value = value;
+
+        boolean hasNumberInconsistentTypeValueError =
+                type == NumberType.LONG && !(value instanceof Long) ||
+                        type == NumberType.DOUBLE && !(value instanceof Double) ||
+                                type == NumberType.BIG_DECIMAL && !(value instanceof BigDecimal);
+        if (hasNumberInconsistentTypeValueError) {
+            throw new IllegalArgumentException("Number value is not consistent with the given type");
+        }
+    }
 
     public NumberType getType() {
         return type;
@@ -25,7 +37,7 @@ public class Number {
         if (type == NumberType.LONG) {
             return (Long)value;
         } else {
-            return Long.valueOf(value.toString());
+            return value.longValue();
         }
     }
 
@@ -33,7 +45,7 @@ public class Number {
         if (type == NumberType.DOUBLE) {
             return (Double) value;
         } else {
-            return Double.valueOf(value.toString());
+            return value.doubleValue();
         }
     }
 

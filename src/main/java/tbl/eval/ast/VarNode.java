@@ -4,13 +4,13 @@ import tbl.eval.token.Token;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
-import tbl.eval.exceptions.UnknownVariableException;
+import tbl.eval.exceptions.VariableNotFoundException;
 import tbl.eval.number.Number;
 
 import java.util.Optional;
 
 /**
- * Variable Node
+ * Variable Node is node for variable
  */
 @Getter
 @Builder
@@ -25,7 +25,7 @@ public class VarNode implements TreeNode {
     private Optional<Token> postIncrDecrToken = Optional.empty();
 
     @Override
-    public Number accept(TreeVisitor visitor) throws UnknownVariableException {
+    public Number accept(TreeVisitor visitor) throws VariableNotFoundException {
         return visitor.visitVarNode(this);
     }
 }

@@ -1,6 +1,6 @@
 package tbl.eval.variable;
 
-import tbl.eval.exceptions.UnknownVariableException;
+import tbl.eval.exceptions.VariableNotFoundException;
 import tbl.eval.number.Number;
 
 /**
@@ -12,7 +12,7 @@ public interface VariableStore {
      * @param varName variable name
      * @return number
      */
-    Number get(String varName) throws UnknownVariableException;
+    Number get(String varName) throws VariableNotFoundException;
 
     /**
      * Set the variable with name and value

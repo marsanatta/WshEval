@@ -3,12 +3,13 @@ package tbl.eval.ast;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
-import tbl.eval.exceptions.UnknownVariableException;
+import tbl.eval.exceptions.VariableNotFoundException;
 import tbl.eval.token.Token;
 import tbl.eval.number.Number;
 
 /**
- * Unary Operation Node (+, -, ++, --)
+ * Unary Operation Node
+ * It's a operator node that consists of the unary operator (+, -) and a expr which the operator operates
  */
 @Getter
 @Builder
@@ -20,7 +21,7 @@ public class UnaryOpNode implements TreeNode {
     private final TreeNode expr;
 
     @Override
-    public Number accept(TreeVisitor visitor) throws UnknownVariableException {
+    public Number accept(TreeVisitor visitor) throws VariableNotFoundException {
         return visitor.visitUnaryOpNode(this);
     }
 }

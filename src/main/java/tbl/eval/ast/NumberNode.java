@@ -6,7 +6,7 @@ import tbl.eval.token.Token;
 import tbl.eval.number.Number;
 
 /**
- * Number Node.
+ * Number Node is node for a Number
  */
 @Getter
 public class NumberNode implements TreeNode {
