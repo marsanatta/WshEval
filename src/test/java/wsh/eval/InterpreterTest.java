@@ -305,7 +305,6 @@ class InterpreterTest {
 
         TreeNode expr = mock();
         Number exprNumber = mock();
-        when(expr.accept(eq(interpreter))).thenReturn(exprNumber);
 
         AssignOpNode node = AssignOpNode.builder()
                 .left(varNode).op(Token.builder().type(TokenType.DOUBLE_PLUS).build()).right(expr).build();

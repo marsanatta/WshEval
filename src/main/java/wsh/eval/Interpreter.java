@@ -13,10 +13,13 @@ import wsh.eval.exceptions.InvalidSyntaxException;
 import wsh.eval.exceptions.UnknownTokenTypeException;
 import wsh.eval.number.Number;
 import wsh.eval.token.Token;
+import wsh.eval.token.TokenType;
 import wsh.eval.variable.VariableStore;
 import lombok.NonNull;
 import wsh.eval.exceptions.InvalidTokenException;
 import wsh.eval.exceptions.VariableNotFoundException;
+
+import java.util.Set;
 
 /**
  * Interpreter interprets the Abstracted Syntax Tree (AST) generated from the Parser
@@ -78,26 +81,26 @@ public class Interpreter implements TreeVisitor {
     public Number visitAssignOpNode(AssignOpNode assignOpNode) throws VariableNotFoundException {
         String varName = assignOpNode.getLeft().getVarName();
         Token op = assignOpNode.getOp();
-        Number rightExpr = assignOpNode.getRight().accept(this);
         Number newVarValue;
+        TreeNode rightExpr = assignOpNode.getRight();
         switch (op.getType()) {
             case ASSIGN:
-                newVarValue = rightExpr;
+                newVarValue = rightExpr.accept(this);
                 break;
             case ADD_ASSIGN:
-                newVarValue = varStore.get(varName).add(rightExpr);
+                newVarValue = varStore.get(varName).add(rightExpr.accept(this));
                 break;
             case SUB_ASSIGN:
-                newVarValue = varStore.get(varName).subtract(rightExpr);
+                newVarValue = varStore.get(varName).subtract(rightExpr.accept(this));
                 break;
             case MUL_ASSIGN:
-                newVarValue = varStore.get(varName).multiply(rightExpr);
+                newVarValue = varStore.get(varName).multiply(rightExpr.accept(this));
                 break;
             case DIV_ASSIGN:
-                newVarValue = varStore.get(varName).divide(rightExpr);
+                newVarValue = varStore.get(varName).divide(rightExpr.accept(this));
                 break;
             case REM_ASSIGN:
-                newVarValue = varStore.get(varName).remainder(rightExpr);
+                newVarValue = varStore.get(varName).remainder(rightExpr.accept(this));
                 break;
             default:
                 throw new UnknownTokenTypeException("Unknown assign operator type: " + op.getType());
