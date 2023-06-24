@@ -8,6 +8,7 @@ import tbl.eval.token.Token;
 import tbl.eval.token.TokenType;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 /**
  * Lexer process the input string to generate Tokens
@@ -80,12 +81,12 @@ public class Lexer {
      * Peek the next character of current character
      * @return character
      */
-    private Character peek() {
+    private Optional<Character> peek() {
         int peekPos = pos + 1;
         if (peekPos > text.length() - 1) {
-            return null;
+            return Optional.empty();
         } else {
-            return text.charAt(peekPos);
+            return Optional.of(text.charAt(peekPos));
         }
     }
 
@@ -107,7 +108,7 @@ public class Lexer {
         while (i < text.length() && (Character.isDigit(text.charAt(i)) ||text.charAt(i) == '.' || isScientificNotion(text.charAt(i)))) {
             sb.append(text.charAt(i));
             // handle negative scientific notion
-            if (isScientificNotion(text.charAt(i)) && i+1 < text.length() && text.charAt(i+1) == '-') {
+            if (isScientificNotion(text.charAt(i)) && i+1 < text.length() && (text.charAt(i+1) == '-' || text.charAt(i+1) == '+')) {
                 sb.append(text.charAt(i+1));
                 i++;
             }
@@ -124,7 +125,7 @@ public class Lexer {
      */
     private Number parseNumber() throws InvalidTokenException {
         var sb = new StringBuilder();
-        if (curChar != null && curChar == '0' && peek() != null && Character.isDigit(peek())) {
+        if (curChar != null && curChar == '0' && peek().isPresent() && Character.isDigit(peek().get())) {
             buildNumber(sb);
             throw new InvalidTokenException(String.format("Number %s starts with zero", sb));
         }
@@ -147,8 +148,8 @@ public class Lexer {
             }
             sb.append(curChar);
             // handle negative scientific notion
-            if (isScientificNotion(curChar) && peek() != null && peek() == '-') {
-                sb.append(peek());
+            if (isScientificNotion(curChar) && peek().isPresent() && (peek().get() == '-' || peek().get() == '+')) {
+                sb.append(peek().get());
                 advance();
             }
             advance();
@@ -156,7 +157,7 @@ public class Lexer {
 
         String numStr = sb.toString();
         BigDecimal bigDecimal = new BigDecimal(numStr);
-        if (bigDecimal.scale() > 0) {
+        if (bigDecimal.scale() > 0 || eCnt > 0) {
             int compareMax = bigDecimal.compareTo(BIG_DECIMAL_MAX_DOUBLE);
             int compareMin = bigDecimal.compareTo(BIG_DECIMAL_MIN_DOUBLE);
             boolean isOverflow = compareMax > 0 || compareMin < 0;
@@ -190,7 +191,7 @@ public class Lexer {
     }
 
     private Token getMinusToken() {
-        if (peek() != null && peek() == '-') {
+        if (peek().isPresent() && peek().get() == '-') {
             advance(2);
             return Token.builder().type(TokenType.DOUBLE_MINUS).build();
         } else {
@@ -200,7 +201,7 @@ public class Lexer {
     }
 
     private Token getPlusToken() {
-        if (peek() != null && peek() == '+') {
+        if (peek().isPresent() && peek().get() == '+') {
             advance(2);
             return Token.builder().type(TokenType.DOUBLE_PLUS).build();
         } else {
@@ -224,19 +225,19 @@ public class Lexer {
                 token = Token.builder().type(TokenType.VAR).value(parseVariable()).build();
             } else if (Character.isDigit(curChar)) {
                 token = Token.builder().type(TokenType.NUM).value(parseNumber()).build();
-            } else if (curChar == '+' && peek() != null && peek() == '=') {
+            } else if (curChar == '+' && peek().isPresent() && peek().get() == '=') {
                 advance(2);
                 token = Token.builder().type(TokenType.ADD_ASSIGN).build();
-            } else if (curChar == '-' && peek() != null && peek() == '=') {
+            } else if (curChar == '-' && peek().isPresent() && peek().get() == '=') {
                 advance(2);
                 token = Token.builder().type(TokenType.SUB_ASSIGN).build();
-            } else if (curChar == '*' && peek() != null && peek() == '=') {
+            } else if (curChar == '*' && peek().isPresent() && peek().get() == '=') {
                 advance(2);
                 token = Token.builder().type(TokenType.MUL_ASSIGN).build();
-            } else if (curChar == '/' && peek() != null && peek() == '=') {
+            } else if (curChar == '/' && peek().isPresent() && peek().get() == '=') {
                 advance(2);
                 token = Token.builder().type(TokenType.DIV_ASSIGN).build();
-            } else if (curChar == '%' && peek() != null && peek() == '=') {
+            } else if (curChar == '%' && peek().isPresent() && peek().get() == '=') {
                 advance(2);
                 token = Token.builder().type(TokenType.REM_ASSIGN).build();
             } else if (curChar == '=') {
