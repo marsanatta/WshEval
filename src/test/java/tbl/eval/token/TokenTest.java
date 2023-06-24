@@ -13,17 +13,7 @@ class TokenTest {
     }
 
     @Test
-    void testBuilder_NumberNotNumberValue() {
-        assertThrows(BuildTokenException.class, () -> Token.builder().type(TokenType.NUM).value("string").build());
-    }
-
-    @Test
     void testBuilder_VariableNullValue() {
         assertThrows(BuildTokenException.class, () -> Token.builder().type(TokenType.VAR).build());
-    }
-
-    @Test
-    void testBuilder_VariableNotStringValue() {
-        assertThrows(BuildTokenException.class, () -> Token.builder().type(TokenType.VAR).value(1L).build());
     }
 }

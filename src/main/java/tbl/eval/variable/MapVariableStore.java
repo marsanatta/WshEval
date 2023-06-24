@@ -11,10 +11,9 @@ import java.util.Map;
 /**
  * Implementation of variable store using map
  */
-@AllArgsConstructor(onConstructor=@__({ @Inject}))
 public class MapVariableStore implements VariableStore {
 
-    private final Map<String, Number> map = new LinkedHashMap<>(); // use linked hash map to keep insertion order aslkdjfalksjdflkjaslkdfjlak;jsdf;lkajskl;dfjlka;jsdfl;kjakls;dfjlka;sjdflkajsdlkfjalk;sdjflkasjdflkahsdkjfhakjlsdhfkjlahsdfasdf
+    private final Map<String, Number> map = new LinkedHashMap<>(); // use linked hash map to preserve insertion order
 
     @Override
     public Number get(String varName) throws VariableNotFoundException {

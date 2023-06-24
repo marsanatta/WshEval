@@ -1,21 +1,21 @@
 package tbl.eval.token;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import tbl.eval.exceptions.BuildTokenException;
-import tbl.eval.number.Number;
 
 /**
  * Token is the basic unit to be processed by the Parser
  * Lexer generates tokens from the raw input
  */
 @Getter
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Token {
     @NonNull
     private final TokenType type;
-    private final Object value;
+    private final String value;
 
     @Override
     public String toString() {
@@ -30,7 +30,13 @@ public class Token {
     public boolean equals(Object obj) {
         if (obj instanceof Token) {
             Token another = (Token)obj;
-            return type.equals(another.getType()) && value.equals(another.getValue());
+            if (value != null ^ another.getValue() != null) {
+                return false;
+            }
+            if (value != null && another.getValue() != null && !value.equals(another.getValue())) {
+                return false;
+            }
+            return type.equals(another.getType());
         } else {
             return false;
         }
@@ -38,14 +44,14 @@ public class Token {
 
     public static class Builder {
         private TokenType type;
-        private Object value;
+        private String value;
 
         public Builder type(TokenType type) {
             this.type = type;
             return this;
         }
 
-        public Builder value(Object value) {
+        public Builder value(String value) {
             this.value = value;
             return this;
         }
@@ -54,14 +60,11 @@ public class Token {
             if (type == TokenType.NUM && value == null) {
                 throw new BuildTokenException("value cannot be null for Number token");
             }
-            if (type == TokenType.NUM && !(value instanceof Number)) {
-                throw new BuildTokenException("value must be Number for Number token");
-            }
             if (type == TokenType.VAR && value == null) {
                 throw new BuildTokenException("value cannot be null for Variable token");
             }
-            if (type == TokenType.VAR && !(value instanceof String)) {
-                throw new BuildTokenException("value must be String for Variable token to indicate the variable name");
+            if (type.getValue() != null) {
+                value = type.getValue();
             }
             return new Token(type, value);
         }

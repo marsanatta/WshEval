@@ -2,12 +2,9 @@ package tbl.eval;
 
 import lombok.Getter;
 import tbl.eval.exceptions.InvalidTokenException;
-import tbl.eval.number.Number;
-import tbl.eval.number.NumberType;
 import tbl.eval.token.Token;
 import tbl.eval.token.TokenType;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 /**
@@ -16,10 +13,6 @@ import java.util.Optional;
  */
 @Getter
 public class Lexer {
-    private static final BigDecimal BIG_DECIMAL_MAX_DOUBLE = BigDecimal.valueOf(Double.MAX_VALUE);
-    private static final BigDecimal BIG_DECIMAL_MIN_DOUBLE = BigDecimal.valueOf(Double.MIN_VALUE);
-    private static final BigDecimal BIG_DECIMAL_MAX_LONG = BigDecimal.valueOf(Long.MAX_VALUE);
-    private static final BigDecimal BIG_DECIMAL_MIN_LONG = BigDecimal.valueOf(Long.MIN_VALUE);
     /**
      * Input string
      */
@@ -121,9 +114,11 @@ public class Lexer {
     }
 
     /**
-     * Parse a Number
+     * Parse a number into string
+     * @return number string
+     * @throws InvalidTokenException invalid token in the expression
      */
-    private Number parseNumber() throws InvalidTokenException {
+    private String parseNumber() throws InvalidTokenException {
         var sb = new StringBuilder();
         if (curChar != null && curChar == '0' && peek().isPresent() && Character.isDigit(peek().get())) {
             buildNumber(sb);
@@ -154,27 +149,7 @@ public class Lexer {
             }
             advance();
         }
-
-        String numStr = sb.toString();
-        BigDecimal bigDecimal = new BigDecimal(numStr);
-        if (bigDecimal.scale() > 0 || eCnt > 0) {
-            int compareMax = bigDecimal.compareTo(BIG_DECIMAL_MAX_DOUBLE);
-            int compareMin = bigDecimal.compareTo(BIG_DECIMAL_MIN_DOUBLE);
-            boolean isOverflow = compareMax > 0 || compareMin < 0;
-            if (isOverflow) {
-                return new Number(NumberType.BIG_DECIMAL, bigDecimal);
-            } else {
-                return new Number(NumberType.DOUBLE, bigDecimal.doubleValue());
-            }
-        } else {
-            try {
-                Long longVal = bigDecimal.longValueExact();
-                return new Number(NumberType.LONG, longVal);
-            } catch (ArithmeticException e) {
-                // overflow
-                return new Number(NumberType.BIG_DECIMAL, bigDecimal);
-            }
-        }
+        return sb.toString();
     }
 
     /**

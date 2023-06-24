@@ -9,23 +9,15 @@ import java.math.RoundingMode;
 
 @Getter
 public class Number {
-    private static final String NUMBER_INCONSISTENT_TYPE_VALUE_ERROR_MSG = "Number value is not consistent with the given type";
+    private static final BigDecimal BIG_DECIMAL_MAX_DOUBLE = BigDecimal.valueOf(Double.MAX_VALUE);
+    private static final BigDecimal BIG_DECIMAL_MIN_DOUBLE = BigDecimal.valueOf(Double.MIN_VALUE);
 
     private final NumberType type;
     private final java.lang.Number value;
-    public Number(@NonNull NumberType type, @NonNull java.lang.Number value) {
+    private Number(@NonNull NumberType type, @NonNull java.lang.Number value) {
         this.type = type;
         this.value = value;
-
-        boolean hasNumberInconsistentTypeValueError =
-                type == NumberType.LONG && !(value instanceof Long) ||
-                        type == NumberType.DOUBLE && !(value instanceof Double) ||
-                                type == NumberType.BIG_DECIMAL && !(value instanceof BigDecimal);
-        if (hasNumberInconsistentTypeValueError) {
-            throw new IllegalArgumentException("Number value is not consistent with the given type");
-        }
     }
-
     public NumberType getType() {
         return type;
     }
@@ -69,11 +61,11 @@ public class Number {
     public Number negate() {
         switch (type) {
             case BIG_DECIMAL:
-                return new Number(NumberType.BIG_DECIMAL, ((BigDecimal)value).negate());
+                return Number.valueOf(((BigDecimal)value).negate());
             case LONG:
-                return new Number(type, -(Long)value);
+                return Number.valueOf(-(Long)value);
             case DOUBLE:
-                return new Number(type, -(Double)value);
+                return Number.valueOf(-(Double)value);
             default:
                 throw new UnknownNumberTypeException("Unknown type when doing neglect: " + type);
         }
@@ -87,11 +79,11 @@ public class Number {
     public Number add(Number another) {
         NumberType resultType = resolveResultNumberType(this, another);
         if (resultType == NumberType.BIG_DECIMAL) {
-            return new Number(NumberType.BIG_DECIMAL, this.bigDecimalValue().add(another.bigDecimalValue()));
+            return Number.valueOf(this.bigDecimalValue().add(another.bigDecimalValue()));
         } else if (resultType == NumberType.DOUBLE) {
-            return new Number(NumberType.DOUBLE, this.doubleValue() + another.doubleValue());
+            return Number.valueOf(this.doubleValue() + another.doubleValue());
         } else if (resultType == NumberType.LONG) {
-            return new Number(NumberType.LONG, this.longValue() + another.longValue());
+            return Number.valueOf(this.longValue() + another.longValue());
         } else {
             throw new UnknownNumberTypeException("Unknown result number type: " + resultType);
         }
@@ -105,11 +97,11 @@ public class Number {
     public Number subtract(Number another) {
         NumberType resultType = resolveResultNumberType(this, another);
         if (resultType == NumberType.BIG_DECIMAL) {
-            return new Number(NumberType.BIG_DECIMAL, this.bigDecimalValue().subtract(another.bigDecimalValue()));
+            return Number.valueOf(this.bigDecimalValue().subtract(another.bigDecimalValue()));
         } else if (resultType == NumberType.DOUBLE) {
-            return new Number(NumberType.DOUBLE, this.doubleValue() - another.doubleValue());
+            return Number.valueOf(this.doubleValue() - another.doubleValue());
         } else if (resultType == NumberType.LONG) {
-            return new Number(NumberType.LONG, this.longValue() - another.longValue());
+            return Number.valueOf(this.longValue() - another.longValue());
         } else {
             throw new UnknownNumberTypeException("Unknown result number type: " + resultType);
         }
@@ -123,11 +115,11 @@ public class Number {
     public Number multiply(Number another) {
         NumberType resultType = resolveResultNumberType(this, another);
         if (resultType == NumberType.BIG_DECIMAL) {
-            return new Number(NumberType.BIG_DECIMAL, this.bigDecimalValue().multiply(another.bigDecimalValue()));
+            return Number.valueOf(this.bigDecimalValue().multiply(another.bigDecimalValue()));
         } else if (resultType == NumberType.DOUBLE) {
-            return new Number(NumberType.DOUBLE, this.doubleValue() * another.doubleValue());
+            return Number.valueOf(this.doubleValue() * another.doubleValue());
         } else if (resultType == NumberType.LONG) {
-            return new Number(NumberType.LONG, this.longValue() * another.longValue());
+            return Number.valueOf(this.longValue() * another.longValue());
         } else {
             throw new UnknownNumberTypeException("Unknown result number type: " + resultType);
         }
@@ -141,12 +133,12 @@ public class Number {
     public Number divide(Number another) {
         NumberType resultType = resolveResultNumberType(this, another);
         if (resultType == NumberType.BIG_DECIMAL) {
-            return new Number(NumberType.BIG_DECIMAL, this.bigDecimalValue().divide(another.bigDecimalValue(),
+            return Number.valueOf(this.bigDecimalValue().divide(another.bigDecimalValue(),
                     RoundingMode.HALF_UP));
         } else if (resultType == NumberType.DOUBLE) {
-            return new Number(NumberType.DOUBLE, this.doubleValue() / another.doubleValue());
+            return Number.valueOf(this.doubleValue() / another.doubleValue());
         } else if (resultType == NumberType.LONG) {
-            return new Number(NumberType.LONG, this.longValue() / another.longValue());
+            return Number.valueOf(this.longValue() / another.longValue());
         } else {
             throw new UnknownNumberTypeException("Unknown result number type: " + resultType);
         }
@@ -160,13 +152,46 @@ public class Number {
     public Number remainder(Number another) {
         NumberType resultType = resolveResultNumberType(this, another);
         if (resultType == NumberType.BIG_DECIMAL) {
-            return new Number(NumberType.BIG_DECIMAL, this.bigDecimalValue().remainder(another.bigDecimalValue()));
+            return Number.valueOf(this.bigDecimalValue().remainder(another.bigDecimalValue()));
         } else if (resultType == NumberType.DOUBLE) {
-            return new Number(NumberType.DOUBLE, this.doubleValue() % another.doubleValue());
+            return Number.valueOf(this.doubleValue() % another.doubleValue());
         } else if (resultType == NumberType.LONG) {
-            return new Number(NumberType.LONG, this.longValue() % another.longValue());
+            return Number.valueOf(this.longValue() % another.longValue());
         } else {
             throw new UnknownNumberTypeException("Unknown result number type: " + resultType);
+        }
+    }
+
+    public static Number valueOf(long number) {
+        return new Number(NumberType.LONG, number);
+    }
+
+    public static Number valueOf(double number) {
+        return new Number(NumberType.DOUBLE, number);
+    }
+
+    public static Number valueOf(BigDecimal number) {
+        return new Number(NumberType.BIG_DECIMAL, number);
+    }
+
+    public static Number valueOf(String numStr) {
+        BigDecimal bigDecimal = new BigDecimal(numStr);
+        if (bigDecimal.scale() > 0 || numStr.toLowerCase().contains("e")) {
+            int compareMax = bigDecimal.compareTo(BIG_DECIMAL_MAX_DOUBLE);
+            int compareMin = bigDecimal.compareTo(BIG_DECIMAL_MIN_DOUBLE);
+            boolean isOverflow = compareMax > 0 || compareMin < 0;
+            if (isOverflow) {
+                return Number.valueOf(bigDecimal);
+            } else {
+                return Number.valueOf(bigDecimal.doubleValue());
+            }
+        } else {
+            try {
+                return Number.valueOf(bigDecimal.longValueExact());
+            } catch (ArithmeticException e) {
+                // overflow
+                return Number.valueOf(bigDecimal);
+            }
         }
     }
 

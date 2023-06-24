@@ -13,15 +13,25 @@ import tbl.eval.number.Number;
  */
 @Getter
 @Builder
-@NonNull
 public class UnaryOpNode implements TreeNode {
     @NonNull
     private final Token op;
     @NonNull
-    private final TreeNode expr;
+    private final TreeNode right;
 
     @Override
     public Number accept(TreeVisitor visitor) throws VariableNotFoundException {
         return visitor.visitUnaryOpNode(this);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof UnaryOpNode) {
+            UnaryOpNode another = (UnaryOpNode) obj;
+            return op.equals(another.op) && right.equals(another.right);
+        } else {
+            return false;
+        }
+    }
+
 }

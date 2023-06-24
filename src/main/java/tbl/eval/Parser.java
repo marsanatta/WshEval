@@ -134,7 +134,7 @@ public class Parser {
 
     /**
      * Parse a factor node
-     * factor : PLUS factor | MINUS factor | NUMBER | LPAREN expr RPAREN | VARIABLE
+     * factor : PLUS factor | MINUS factor | NUMBER | LPAREN expr RPAREN | VARIABLE(with pre/post increment/decrement)
      * @return tree node
      * @throws InvalidTokenException input has invalid token
      * @throws InvalidSyntaxException input has invalid syntax
@@ -144,13 +144,13 @@ public class Parser {
         switch (token.getType()) {
             case PLUS:
                 eat(TokenType.PLUS);
-                return UnaryOpNode.builder().op(token).expr(factor()).build();
+                return UnaryOpNode.builder().op(token).right(factor()).build();
             case MINUS:
                 eat(TokenType.MINUS);
-            return UnaryOpNode.builder().op(token).expr(factor()).build();
+            return UnaryOpNode.builder().op(token).right(factor()).build();
             case NUM:
                 eat(TokenType.NUM);
-                return new NumberNode(token);
+                return NumberNode.builder().token(token).build();
             case LPAREN:
                 eat(TokenType.LPAREN);
                 TreeNode node = expr();
@@ -196,19 +196,18 @@ public class Parser {
      * @throws InvalidSyntaxException input has invalid syntax
      */
     private VarNode parseVariable() throws InvalidTokenException, InvalidSyntaxException {
-        VarNode.VarNodeBuilder varNodeBuilder = VarNode.builder();
+        VarNode.Builder varNodeBuilder = VarNode.builder();
         // parse pre-increment/decrement operator
         Token preIncrDecrToken = null;
         if (TOKEN_TYPE_UNARY_INCR_DECR_SET.contains(curToken.getType())) {
             preIncrDecrToken = curToken;
             eat(TOKEN_TYPE_UNARY_INCR_DECR_SET);
-            varNodeBuilder.preIncrDecrToken(Optional.of(preIncrDecrToken));
+            varNodeBuilder.preIncrDecrToken(preIncrDecrToken);
         }
         // parser variable
         Token varToken = eat(TokenType.VAR);
         varNodeBuilder
-                .token(varToken)
-                .varName((String)varToken.getValue());
+                .token(varToken);
 
         // parse post-increment/decrement operator
         if (TOKEN_TYPE_UNARY_INCR_DECR_SET.contains(curToken.getType())) {
@@ -217,7 +216,7 @@ public class Parser {
             }
             Token postIncrDecrToken = curToken;
             eat(TOKEN_TYPE_UNARY_INCR_DECR_SET);
-            varNodeBuilder.postIncrDecrToken(Optional.of(postIncrDecrToken));
+            varNodeBuilder.postIncrDecrToken(postIncrDecrToken);
         }
         return varNodeBuilder.build();
     }

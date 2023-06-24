@@ -27,4 +27,14 @@ public class AssignOpNode implements TreeNode {
     public Number accept(TreeVisitor visitor) throws VariableNotFoundException {
         return visitor.visitAssignOpNode(this);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof AssignOpNode) {
+            AssignOpNode another = (AssignOpNode) obj;
+            return left.equals(another.left) && op.equals(another.op) && right.equals(another.right);
+        } else {
+            return false;
+        }
+    }
 }

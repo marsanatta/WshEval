@@ -1,23 +1,33 @@
 package tbl.eval.token;
 
 public enum TokenType {
-    NUM, // number
-    PLUS, // +
-    DOUBLE_PLUS, // ++
-    MINUS, // -
-    DOUBLE_MINUS, // --
-    MUL, // *
-    DIV, // /
-    REM, // %
-    LPAREN, // (
-    RPAREN, // )
-    VAR, // variable
-    ASSIGN, // =
-    ADD_ASSIGN, // +=
-    SUB_ASSIGN, // -=
-    MUL_ASSIGN, // *=
-    DIV_ASSIGN, // /=
-    REM_ASSIGN, // %=
-    EOF // end of input
+    PLUS("+"),
+    DOUBLE_PLUS("++"),
+    MINUS("-"),
+    DOUBLE_MINUS("--"),
+    MUL("*"),
+    DIV("/"),
+    REM("%"),
+    LPAREN("("),
+    RPAREN(")"),
+    ASSIGN("="),
+    ADD_ASSIGN("+="),
+    SUB_ASSIGN("-="),
+    MUL_ASSIGN("*="),
+    DIV_ASSIGN("/="),
+    REM_ASSIGN("%="),
+    NUM(null), // number
+    VAR(null), // variable
+    EOF(null); // end of input
+
+    private String value;
+
+    TokenType(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
 
 }

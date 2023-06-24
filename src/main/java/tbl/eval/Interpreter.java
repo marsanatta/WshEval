@@ -12,7 +12,6 @@ import tbl.eval.ast.VarNode;
 import tbl.eval.exceptions.InvalidSyntaxException;
 import tbl.eval.exceptions.UnknownTokenTypeException;
 import tbl.eval.number.Number;
-import tbl.eval.number.NumberType;
 import tbl.eval.token.Token;
 import tbl.eval.variable.VariableStore;
 import lombok.NonNull;
@@ -66,9 +65,9 @@ public class Interpreter implements TreeVisitor {
         Token op = node.getOp();
         switch (op.getType()) {
             case PLUS:
-                return node.getExpr().accept(this);
+                return node.getRight().accept(this);
             case MINUS:
-                Number number = node.getExpr().accept(this);
+                Number number = node.getRight().accept(this);
                 return number.negate();
             default:
                 throw new UnknownTokenTypeException("Unknown unary operator type:" + op.getType());
@@ -115,9 +114,9 @@ public class Interpreter implements TreeVisitor {
     private Number getNewVarValue(Token op, Number varValue) {
         switch (op.getType()) {
             case DOUBLE_PLUS:
-                return varValue.add(new Number(NumberType.LONG, 1L));
+                return varValue.add(Number.valueOf(1L));
             case DOUBLE_MINUS:
-                return varValue.subtract(new Number(NumberType.LONG, 1L));
+                return varValue.subtract(Number.valueOf(1L));
             default:
                 throw new UnknownTokenTypeException("Unknown unary increment/decrement token type:" + op.getType());
         }

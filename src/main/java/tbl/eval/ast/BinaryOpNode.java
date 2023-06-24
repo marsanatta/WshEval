@@ -26,4 +26,14 @@ public class BinaryOpNode implements TreeNode {
     public Number accept(TreeVisitor visitor) throws VariableNotFoundException {
         return visitor.visitBinaryOpNode(this);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof BinaryOpNode) {
+            BinaryOpNode another = (BinaryOpNode) obj;
+            return left.equals(another.left) && op.equals(another.op) && right.equals(another.right);
+        } else {
+            return false;
+        }
+    }
 }
