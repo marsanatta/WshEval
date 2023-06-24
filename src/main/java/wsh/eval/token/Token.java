@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import wsh.eval.exceptions.BuildTokenException;
 
+import java.util.Objects;
+
 /**
  * Token is the basic unit to be processed by the Parser
  * Lexer generates tokens from the raw input
@@ -29,14 +31,8 @@ public class Token {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Token) {
-            Token another = (Token)obj;
-            if (value != null ^ another.getValue() != null) {
-                return false;
-            }
-            if (value != null && another.getValue() != null && !value.equals(another.getValue())) {
-                return false;
-            }
-            return type.equals(another.getType());
+            Token another = (Token) obj;
+            return Objects.equals(value, another.value) && type.equals(another.getType());
         } else {
             return false;
         }

@@ -9,8 +9,8 @@ import wsh.eval.exceptions.InvalidTokenException;
 import wsh.eval.token.Token;
 import wsh.eval.token.TokenType;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class LexerTest {
@@ -72,7 +72,7 @@ class LexerTest {
 
     @Test
     void testGetToken_NumberMultiDecimalPoint() {
-        String num = "1.2.3";
+        String num = "1.2.3e+10";
         lexer.consume(num);
         assertThrows(InvalidTokenException.class, () -> lexer.getToken());
     }

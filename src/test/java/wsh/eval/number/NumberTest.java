@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class NumberTest {
 
@@ -53,10 +53,17 @@ class NumberTest {
 
 
     @Test
-    void testNegate() {
+    void testNegate_Long() {
         Number num = Number.valueOf(1L);
         num = num.negate();
         assertEquals(-1L, num.getValue());
+    }
+
+    @Test
+    void testNegate_Double() {
+        Number num = Number.valueOf(1.0);
+        num = num.negate();
+        assertEquals(-1.0, num.getValue());
     }
 
     @Test
@@ -104,8 +111,8 @@ class NumberTest {
 
     @Test
     void testSubtract_TargetDouble() {
-        Number num1 = Number.valueOf(1L);
-        Number num2 = Number.valueOf(1.0);
+        Number num1 = Number.valueOf(1.0);
+        Number num2 = Number.valueOf(1L);
         Number num3 = num1.subtract(num2);
         assertEquals(NumberType.DOUBLE, num3.getType());
         assertEquals(0.0, num3.getValue());
@@ -189,7 +196,7 @@ class NumberTest {
         Number num2 = Number.valueOf(3.1);
         Number num3 = num1.remainder(num2);
         assertEquals(NumberType.DOUBLE, num3.getType());
-        assertEquals(1.8D, (Double)num3.getValue(), 0.01D);
+        assertEquals(1.8D, (Double) num3.getValue(), 0.01D);
     }
 
     @Test

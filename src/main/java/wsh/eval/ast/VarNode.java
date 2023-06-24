@@ -1,6 +1,9 @@
 package wsh.eval.ast;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NonNull;
 import wsh.eval.exceptions.BuildVarNodeException;
 import wsh.eval.token.Token;
 import wsh.eval.exceptions.VariableNotFoundException;
@@ -14,6 +17,7 @@ import java.util.Optional;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class VarNode implements TreeNode {
+
     @NonNull
     private final Token token;
     @NonNull
@@ -43,13 +47,13 @@ public class VarNode implements TreeNode {
             if (postIncrDecrToken.isPresent() ^ another.postIncrDecrToken.isPresent()) {
                 return false;
             }
-            if (preIncrDecrToken.isPresent() && another.preIncrDecrToken.isPresent() &&
-                    !preIncrDecrToken.get().equals(another.preIncrDecrToken.get())
+            if (preIncrDecrToken.isPresent() && another.preIncrDecrToken.isPresent()
+                    && !preIncrDecrToken.get().equals(another.preIncrDecrToken.get())
             ) {
                 return false;
             }
-            if (postIncrDecrToken.isPresent() && another.postIncrDecrToken.isPresent() &&
-                    !postIncrDecrToken.get().equals(another.postIncrDecrToken.get())
+            if (postIncrDecrToken.isPresent() && another.postIncrDecrToken.isPresent()
+                    && !postIncrDecrToken.get().equals(another.postIncrDecrToken.get())
             ) {
                 return false;
             }
@@ -85,7 +89,8 @@ public class VarNode implements TreeNode {
                 throw new BuildVarNodeException("token must be non-null");
             }
             String varName = token.getValue();
-            return new VarNode(token, varName, Optional.ofNullable(preIncrDecrToken), Optional.ofNullable(postIncrDecrToken));
+            return new VarNode(token, varName, Optional.ofNullable(preIncrDecrToken),
+                    Optional.ofNullable(postIncrDecrToken));
         }
     }
 

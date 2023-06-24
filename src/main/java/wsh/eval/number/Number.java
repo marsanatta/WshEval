@@ -14,10 +14,12 @@ public class Number {
 
     private final NumberType type;
     private final java.lang.Number value;
+
     private Number(@NonNull NumberType type, @NonNull java.lang.Number value) {
         this.type = type;
         this.value = value;
     }
+
     public NumberType getType() {
         return type;
     }
@@ -28,7 +30,7 @@ public class Number {
 
     public long longValue() {
         if (type == NumberType.LONG) {
-            return (Long)value;
+            return (Long) value;
         } else {
             return value.longValue();
         }
@@ -61,11 +63,11 @@ public class Number {
     public Number negate() {
         switch (type) {
             case BIG_DECIMAL:
-                return Number.valueOf(((BigDecimal)value).negate());
+                return Number.valueOf(((BigDecimal) value).negate());
             case LONG:
-                return Number.valueOf(-(Long)value);
+                return Number.valueOf(-(Long) value);
             case DOUBLE:
-                return Number.valueOf(-(Double)value);
+                return Number.valueOf(-(Double) value);
             default:
                 throw new UnknownNumberTypeException("Unknown type when doing neglect: " + type);
         }
@@ -73,6 +75,7 @@ public class Number {
 
     /**
      * Add another number
+     *
      * @param another another number
      * @return result number
      */
@@ -91,6 +94,7 @@ public class Number {
 
     /**
      * Subtract another number
+     *
      * @param another another number
      * @return result number
      */
@@ -109,6 +113,7 @@ public class Number {
 
     /**
      * Multiply another number
+     *
      * @param another another number
      * @return result number
      */
@@ -127,6 +132,7 @@ public class Number {
 
     /**
      * Divide another number
+     *
      * @param another another number
      * @return result number
      */
@@ -146,6 +152,7 @@ public class Number {
 
     /**
      * Remainder another number
+     *
      * @param another another number
      * @return result number
      */
@@ -203,7 +210,7 @@ public class Number {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Number) {
-            Number another = (Number)obj;
+            Number another = (Number) obj;
             return type.equals(another.getType()) && value.equals(another.getValue());
         } else {
             return false;

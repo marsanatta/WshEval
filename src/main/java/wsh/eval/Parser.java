@@ -22,9 +22,8 @@ public class Parser {
             TokenType.SUB_ASSIGN, TokenType.MUL_ASSIGN, TokenType.DIV_ASSIGN, TokenType.REM_ASSIGN);
     private static final Set<TokenType> TOKEN_TYPE_EXPR_OP_SET = Set.of(TokenType.PLUS, TokenType.MINUS);
     private static final Set<TokenType> TOKEN_TYPE_TERM_OP_SET = Set.of(TokenType.MUL, TokenType.DIV, TokenType.REM);
-    private static final Set<TokenType> TOKEN_TYPE_UNARY_INCR_DECR_SET = Set.of(TokenType.DOUBLE_PLUS, TokenType.DOUBLE_MINUS);
-    //private static final Set<TokenType> TOKEN_TYPE_PRE_INCR_DECR_SET = Set.of(TokenType.PRE_INCREMENT, TokenType.PRE_DECREMENT);
-    //private static final Set<TokenType> TOKEN_TYPE_POST_INCR_DECR_SET = Set.of(TokenType.POST_INCREMENT, TokenType.POST_DECREMENT);
+    private static final Set<TokenType> TOKEN_TYPE_UNARY_INCR_DECR_SET = Set.of(
+            TokenType.DOUBLE_PLUS, TokenType.DOUBLE_MINUS);
 
     private final Lexer lexer;
     private Token curToken;
@@ -47,7 +46,9 @@ public class Parser {
         if (types.contains(curToken.getType())) {
             curToken = lexer.getToken();
         } else {
-            throw new InvalidSyntaxException(String.format("Invalid syntax at token: %s expect any from %s", curToken, types));
+            throw new InvalidSyntaxException(
+                    String.format("Invalid syntax at token: %s expect any from %s", curToken, types)
+            );
         }
         return eatenNode;
     }
@@ -146,7 +147,7 @@ public class Parser {
                 return UnaryOpNode.builder().op(token).right(factor()).build();
             case MINUS:
                 eat(TokenType.MINUS);
-            return UnaryOpNode.builder().op(token).right(factor()).build();
+                return UnaryOpNode.builder().op(token).right(factor()).build();
             case NUM:
                 eat(TokenType.NUM);
                 return NumberNode.builder().token(token).build();
@@ -160,7 +161,9 @@ public class Parser {
             case DOUBLE_MINUS: // pre decrement
                 return parseVariable();
             default:
-                throw new InvalidSyntaxException(String.format("Encounter invalid token %s while parsing. Expect a factor", curToken));
+                throw new InvalidSyntaxException(
+                        String.format("Encounter invalid token %s while parsing. Expect a factor", curToken)
+                );
         }
     }
 
@@ -182,7 +185,9 @@ public class Parser {
             root = expr();
         }
         if (curToken.getType() != TokenType.EOF) {
-            throw new InvalidSyntaxException(String.format("Encounter invalid token %s while parsing. Expect an EOF", curToken));
+            throw new InvalidSyntaxException(
+                    String.format("Encounter invalid token %s while parsing. Expect an EOF", curToken)
+            );
         }
         return root;
     }
@@ -211,7 +216,9 @@ public class Parser {
         // parse post-increment/decrement operator
         if (TOKEN_TYPE_UNARY_INCR_DECR_SET.contains(curToken.getType())) {
             if (preIncrDecrToken != null) {
-                throw new InvalidSyntaxException("Variable " + varToken + " have both pre and post increment/decrement operator");
+                throw new InvalidSyntaxException(
+                        "Variable " + varToken + " have both pre and post increment/decrement operator"
+                );
             }
             Token postIncrDecrToken = curToken;
             eat(TOKEN_TYPE_UNARY_INCR_DECR_SET);

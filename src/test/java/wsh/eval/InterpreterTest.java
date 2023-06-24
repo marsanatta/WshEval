@@ -58,7 +58,10 @@ class InterpreterTest {
         when(right.accept(eq(interpreter))).thenReturn(rightNumber);
         when(leftNumber.add(eq(rightNumber))).thenReturn(resultNumber);
 
-        BinaryOpNode node = BinaryOpNode.builder().left(left).op(Token.builder().type(TokenType.PLUS).build()).right(right).build();
+        BinaryOpNode node = BinaryOpNode.builder()
+                .left(left)
+                .op(Token.builder().type(TokenType.PLUS).build())
+                .right(right).build();
         assertEquals(resultNumber, (interpreter.visitBinaryOpNode(node)));
     }
 
@@ -73,7 +76,8 @@ class InterpreterTest {
         when(right.accept(eq(interpreter))).thenReturn(rightNumber);
         when(leftNumber.subtract(eq(rightNumber))).thenReturn(resultNumber);
 
-        BinaryOpNode node = BinaryOpNode.builder().left(left).op(Token.builder().type(TokenType.MINUS).build()).right(right).build();
+        BinaryOpNode node = BinaryOpNode.builder()
+                .left(left).op(Token.builder().type(TokenType.MINUS).build()).right(right).build();
         assertEquals(resultNumber, (interpreter.visitBinaryOpNode(node)));
     }
 
@@ -88,7 +92,9 @@ class InterpreterTest {
         when(right.accept(eq(interpreter))).thenReturn(rightNumber);
         when(leftNumber.multiply(eq(rightNumber))).thenReturn(resultNumber);
 
-        BinaryOpNode node = BinaryOpNode.builder().left(left).op(Token.builder().type(TokenType.MUL).build()).right(right).build();
+        BinaryOpNode node = BinaryOpNode.builder()
+                .left(left).op(Token.builder().type(TokenType.MUL).build())
+                .right(right).build();
         assertEquals(resultNumber, (interpreter.visitBinaryOpNode(node)));
     }
 
@@ -103,7 +109,8 @@ class InterpreterTest {
         when(right.accept(eq(interpreter))).thenReturn(rightNumber);
         when(leftNumber.divide(eq(rightNumber))).thenReturn(resultNumber);
 
-        BinaryOpNode node = BinaryOpNode.builder().left(left).op(Token.builder().type(TokenType.DIV).build()).right(right).build();
+        BinaryOpNode node = BinaryOpNode.builder()
+                .left(left).op(Token.builder().type(TokenType.DIV).build()).right(right).build();
         assertEquals(resultNumber, (interpreter.visitBinaryOpNode(node)));
     }
 
@@ -118,7 +125,9 @@ class InterpreterTest {
         when(right.accept(eq(interpreter))).thenReturn(rightNumber);
         when(leftNumber.remainder(eq(rightNumber))).thenReturn(resultNumber);
 
-        BinaryOpNode node = BinaryOpNode.builder().left(left).op(Token.builder().type(TokenType.REM).build()).right(right).build();
+        BinaryOpNode node = BinaryOpNode.builder()
+                .left(left).op(Token.builder().type(TokenType.REM).build())
+                .right(right).build();
         assertEquals(resultNumber, (interpreter.visitBinaryOpNode(node)));
     }
 
@@ -127,7 +136,8 @@ class InterpreterTest {
         TreeNode left = mock();
         TreeNode right = mock();
 
-        BinaryOpNode node = BinaryOpNode.builder().left(left).op(Token.builder().type(TokenType.DOUBLE_MINUS).build()).right(right).build();
+        BinaryOpNode node = BinaryOpNode.builder()
+                .left(left).op(Token.builder().type(TokenType.DOUBLE_MINUS).build()).right(right).build();
         assertThrows(UnknownTokenTypeException.class, () -> interpreter.visitBinaryOpNode(node));
     }
 
@@ -152,7 +162,9 @@ class InterpreterTest {
     @Test
     void testVisitUnaryOpNode_Unknown() {
         TreeNode expr = mock();
-        UnaryOpNode node = UnaryOpNode.builder().op(Token.builder().type(TokenType.DOUBLE_PLUS).build()).right(expr).build();
+        UnaryOpNode node = UnaryOpNode.builder()
+                .op(Token.builder().type(TokenType.DOUBLE_PLUS).build())
+                .right(expr).build();
         assertThrows(UnknownTokenTypeException.class, () -> interpreter.visitUnaryOpNode(node));
     }
 
@@ -166,7 +178,8 @@ class InterpreterTest {
         Number exprNumber = Number.valueOf(2L);
         when(expr.accept(eq(interpreter))).thenReturn(exprNumber);
 
-        AssignOpNode node = AssignOpNode.builder().left(varNode).op(Token.builder().type(TokenType.ASSIGN).build()).right(expr).build();
+        AssignOpNode node = AssignOpNode.builder()
+                .left(varNode).op(Token.builder().type(TokenType.ASSIGN).build()).right(expr).build();
         assertEquals(exprNumber, interpreter.visitAssignOpNode(node));
         verify(varStore, times(1)).set(eq(varName), eq(exprNumber));
     }
@@ -186,7 +199,10 @@ class InterpreterTest {
         Number newVarValue = Number.valueOf(1L);
         when(varValue.add(eq(exprNumber))).thenReturn(newVarValue);
 
-        AssignOpNode node = AssignOpNode.builder().left(varNode).op(Token.builder().type(TokenType.ADD_ASSIGN).build()).right(expr).build();
+        AssignOpNode node = AssignOpNode.builder()
+                .left(varNode)
+                .op(Token.builder().type(TokenType.ADD_ASSIGN).build())
+                .right(expr).build();
         assertEquals(newVarValue, interpreter.visitAssignOpNode(node));
         verify(varStore, times(1)).set(eq(varName), eq(newVarValue));
     }
@@ -206,7 +222,10 @@ class InterpreterTest {
         Number newVarValue = Number.valueOf(1L);
         when(varValue.subtract(eq(exprNumber))).thenReturn(newVarValue);
 
-        AssignOpNode node = AssignOpNode.builder().left(varNode).op(Token.builder().type(TokenType.SUB_ASSIGN).build()).right(expr).build();
+        AssignOpNode node = AssignOpNode.builder()
+                .left(varNode)
+                .op(Token.builder().type(TokenType.SUB_ASSIGN).build())
+                .right(expr).build();
         assertEquals(newVarValue, interpreter.visitAssignOpNode(node));
         verify(varStore, times(1)).set(eq(varName), eq(newVarValue));
     }
@@ -226,7 +245,8 @@ class InterpreterTest {
         Number newVarValue = Number.valueOf(1L);
         when(varValue.multiply(eq(exprNumber))).thenReturn(newVarValue);
 
-        AssignOpNode node = AssignOpNode.builder().left(varNode).op(Token.builder().type(TokenType.MUL_ASSIGN).build()).right(expr).build();
+        AssignOpNode node = AssignOpNode.builder()
+                .left(varNode).op(Token.builder().type(TokenType.MUL_ASSIGN).build()).right(expr).build();
         assertEquals(newVarValue, interpreter.visitAssignOpNode(node));
         verify(varStore, times(1)).set(eq(varName), eq(newVarValue));
     }
@@ -246,7 +266,10 @@ class InterpreterTest {
         Number newVarValue = Number.valueOf(1L);
         when(varValue.divide(eq(exprNumber))).thenReturn(newVarValue);
 
-        AssignOpNode node = AssignOpNode.builder().left(varNode).op(Token.builder().type(TokenType.DIV_ASSIGN).build()).right(expr).build();
+        AssignOpNode node = AssignOpNode.builder()
+                .left(varNode)
+                .op(Token.builder().type(TokenType.DIV_ASSIGN).build())
+                .right(expr).build();
         assertEquals(newVarValue, interpreter.visitAssignOpNode(node));
         verify(varStore, times(1)).set(eq(varName), eq(newVarValue));
     }
@@ -266,7 +289,10 @@ class InterpreterTest {
         Number newVarValue = Number.valueOf(1L);
         when(varValue.remainder(eq(exprNumber))).thenReturn(newVarValue);
 
-        AssignOpNode node = AssignOpNode.builder().left(varNode).op(Token.builder().type(TokenType.REM_ASSIGN).build()).right(expr).build();
+        AssignOpNode node = AssignOpNode.builder()
+                .left(varNode)
+                .op(Token.builder().type(TokenType.REM_ASSIGN).build())
+                .right(expr).build();
         assertEquals(newVarValue, interpreter.visitAssignOpNode(node));
         verify(varStore, times(1)).set(eq(varName), eq(newVarValue));
     }
@@ -281,7 +307,8 @@ class InterpreterTest {
         Number exprNumber = mock();
         when(expr.accept(eq(interpreter))).thenReturn(exprNumber);
 
-        AssignOpNode node = AssignOpNode.builder().left(varNode).op(Token.builder().type(TokenType.DOUBLE_PLUS).build()).right(expr).build();
+        AssignOpNode node = AssignOpNode.builder()
+                .left(varNode).op(Token.builder().type(TokenType.DOUBLE_PLUS).build()).right(expr).build();
         assertThrows(UnknownTokenTypeException.class, () -> interpreter.visitAssignOpNode(node));
     }
 

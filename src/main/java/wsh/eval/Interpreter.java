@@ -140,11 +140,13 @@ public class Interpreter implements TreeVisitor {
         return evalValue;
     }
 
-    public Number interpret(String text) throws InvalidTokenException, InvalidSyntaxException, VariableNotFoundException {
+    public Number interpret(String text) throws InvalidTokenException, InvalidSyntaxException,
+            VariableNotFoundException {
         lexer.consume(text);
         TreeNode root = parser.parse();
-        if (root == null)
+        if (root == null) {
             return null;
+        }
         return root.accept(this);
     }
 

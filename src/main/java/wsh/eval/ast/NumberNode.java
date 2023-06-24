@@ -12,7 +12,7 @@ import wsh.eval.number.Number;
  * Number Node is node for a Number
  */
 @Getter
-@AllArgsConstructor(access= AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class NumberNode implements TreeNode {
 
     @NonNull

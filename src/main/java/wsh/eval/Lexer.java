@@ -98,11 +98,13 @@ public class Lexer {
      */
     private void buildNumber(StringBuilder sb) {
         int i = pos;
-        while (i < text.length() && (Character.isDigit(text.charAt(i)) ||text.charAt(i) == '.' || isScientificNotion(text.charAt(i)))) {
+        while (i < text.length() && (Character.isDigit(text.charAt(i)) || text.charAt(i) == '.'
+                || isScientificNotion(text.charAt(i)))) {
             sb.append(text.charAt(i));
             // handle negative scientific notion
-            if (isScientificNotion(text.charAt(i)) && i+1 < text.length() && (text.charAt(i+1) == '-' || text.charAt(i+1) == '+')) {
-                sb.append(text.charAt(i+1));
+            if (isScientificNotion(text.charAt(i)) && i + 1 < text.length()
+                    && (text.charAt(i + 1) == '-' || text.charAt(i + 1) == '+')) {
+                sb.append(text.charAt(i + 1));
                 i++;
             }
             i++;
@@ -126,7 +128,7 @@ public class Lexer {
         }
 
         int dotCnt = 0;
-        int eCnt = 0;
+        int expCnt = 0;
         while (curChar != null && (Character.isDigit(curChar) || curChar == '.' || isScientificNotion(curChar))) {
             if (curChar == '.') {
                 dotCnt++;
@@ -135,8 +137,8 @@ public class Lexer {
                     throw new InvalidTokenException(String.format("Number %s has multiple decimal points", sb));
                 }
             } else if (isScientificNotion(curChar)) {
-                eCnt++;
-                if (eCnt >= 2) {
+                expCnt++;
+                if (expCnt >= 2) {
                     buildNumber(sb);
                     throw new InvalidTokenException(String.format("Number %s has multiple scientific notion", sb));
                 }

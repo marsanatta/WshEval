@@ -22,6 +22,7 @@ public class BinaryOpNode implements TreeNode {
     private final Token op;
     @NonNull
     private final TreeNode right;
+
     @Override
     public Number accept(TreeVisitor visitor) throws VariableNotFoundException {
         return visitor.visitBinaryOpNode(this);

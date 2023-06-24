@@ -32,7 +32,7 @@ class MapVariableStoreTest {
 
     @Test
     void testGet_NotFound() {
-        assertThrows(VariableNotFoundException.class, () ->varStore.get("a"));
+        assertThrows(VariableNotFoundException.class, () -> varStore.get("a"));
     }
 
     @Test
@@ -42,8 +42,8 @@ class MapVariableStoreTest {
         varStore.set(varName1, Number.valueOf(1L));
         varStore.set(varName2, Number.valueOf(3.0));
         varStore.clean();
-        assertThrows(VariableNotFoundException.class, () ->varStore.get(varName1));
-        assertThrows(VariableNotFoundException.class, () ->varStore.get(varName2));
+        assertThrows(VariableNotFoundException.class, () -> varStore.get(varName1));
+        assertThrows(VariableNotFoundException.class, () -> varStore.get(varName2));
     }
 
     @Test

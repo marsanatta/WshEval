@@ -26,8 +26,12 @@ public class Main {
             Injector injector = Guice.createInjector(new InterpreterModule());
             Interpreter interpreter = injector.getInstance(Interpreter.class);
             VariableStore varStore = interpreter.getVarStore();
-            System.out.println("Please enter the expression here. The result of evaluation will be output after press enter");
-            System.out.println("Commands:\n - vars: print variables\n - clean: remove all stored variables\n - exit: exit the program");
+            System.out.println("Please enter the expression here. "
+                    + "The result of evaluation will be output after press enter");
+            System.out.println("Commands:\n"
+                    + " - vars: print variables\n"
+                    + " - clean: remove all stored variables\n"
+                    + " - exit: exit the program");
             while (true) {
                 String text = scanner.nextLine();
                 if (text.equals(COMMAND_EXIT)) {

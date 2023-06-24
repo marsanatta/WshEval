@@ -7,7 +7,8 @@ import wsh.eval.number.Number;
 import wsh.eval.token.Token;
 import wsh.eval.token.TokenType;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

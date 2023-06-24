@@ -5,12 +5,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import wsh.eval.ast.AssignOpNode;
+import wsh.eval.ast.BinaryOpNode;
+import wsh.eval.ast.NumberNode;
+import wsh.eval.ast.UnaryOpNode;
+import wsh.eval.ast.VarNode;
 import wsh.eval.exceptions.InvalidSyntaxException;
 import wsh.eval.token.Token;
 import wsh.eval.token.TokenType;
-import wsh.eval.ast.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,7 +53,7 @@ class ParserTest {
 
     @Test
     void testParse_Factor_UnaryOpNode_MINUS() throws Exception {
-        Token op = Token.builder().type(TokenType.PLUS).build();
+        Token op = Token.builder().type(TokenType.MINUS).build();
         Token numToken = Token.builder().type(TokenType.NUM).value("1").build();
         when(lexer.getToken()).thenReturn(
                 op,
@@ -72,7 +77,7 @@ class ParserTest {
                 Token.builder().type(TokenType.ASSIGN).value("1").build(),
                 EOF_TOKEN
         );
-        assertThrows(InvalidSyntaxException.class ,() -> parser.parse());
+        assertThrows(InvalidSyntaxException.class, () -> parser.parse());
     }
 
     @Test
@@ -161,7 +166,7 @@ class ParserTest {
                 postIncrDecrToken,
                 EOF_TOKEN
         );
-        assertThrows(InvalidSyntaxException.class,() -> parser.parse());
+        assertThrows(InvalidSyntaxException.class, () -> parser.parse());
     }
 
     @Test
@@ -335,7 +340,7 @@ class ParserTest {
                 Token.builder().type(TokenType.ASSIGN).build(),
                 EOF_TOKEN
         );
-        assertThrows(InvalidSyntaxException.class ,() -> parser.parse());
+        assertThrows(InvalidSyntaxException.class, () -> parser.parse());
     }
 
     @Test
@@ -497,6 +502,16 @@ class ParserTest {
                 EOF_TOKEN
         );
         when(lexer.getText()).thenReturn(varToken.getValue() + opToken.getValue() + notExprToken.getValue());
+        assertThrows(InvalidSyntaxException.class, () -> parser.parse());
+    }
+
+    @Test
+    void testParse_NotEndWithEOL() throws Exception {
+        Token varToken = Token.builder().type(TokenType.VAR).value("a").build();
+        when(lexer.getToken()).thenReturn(
+                varToken
+        );
+        when(lexer.getText()).thenReturn(varToken.getValue());
         assertThrows(InvalidSyntaxException.class, () -> parser.parse());
     }
 }

@@ -3,7 +3,7 @@ package wsh.eval.token;
 import org.junit.jupiter.api.Test;
 import wsh.eval.exceptions.BuildTokenException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TokenTest {
 
