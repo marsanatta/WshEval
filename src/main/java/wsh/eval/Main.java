@@ -2,9 +2,13 @@ package wsh.eval;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import wsh.eval.command.CleanVariablesCommand;
+import wsh.eval.command.Command;
+import wsh.eval.command.CommandHelper;
+import wsh.eval.command.ExitCommand;
+import wsh.eval.command.PrintVariablesCommand;
 import wsh.eval.module.InterpreterModule;
 import wsh.eval.number.Number;
-import wsh.eval.variable.VariableStore;
 
 import java.util.Scanner;
 
@@ -17,43 +21,51 @@ import java.util.Scanner;
  * - exit: exit the console
  */
 public class Main {
-    public static final String COMMAND_PRINT_VARS = "vars";
-    public static final String COMMAND_CLEAN_VARS = "clean";
-    public static final String COMMAND_EXIT = "exit";
+    private static Scanner scanner = null;
 
     public static void main(String[] args) {
+        Runtime.getRuntime().addShutdownHook(new Thread(Main::cleanup));
         try (Scanner scanner = new Scanner(System.in)) {
             Injector injector = Guice.createInjector(new InterpreterModule());
             Interpreter interpreter = injector.getInstance(Interpreter.class);
-            VariableStore varStore = interpreter.getVarStore();
-            System.out.println("Please enter the expression here. "
-                    + "The result of evaluation will be output after press enter");
-            System.out.println("Commands:\n"
-                    + " - vars: print variables\n"
-                    + " - clean: remove all stored variables\n"
-                    + " - exit: exit the program");
+            printInstructions();
             while (true) {
                 String text = scanner.nextLine();
-                if (text.equals(COMMAND_EXIT)) {
-                    System.out.println("Good bye!");
-                    break;
-                } else if (text.equals(COMMAND_PRINT_VARS)) {
-                    System.out.println(varStore);
-                } else if (text.equals(COMMAND_CLEAN_VARS)) {
-                    varStore.clean();
-                    System.out.println("Variables are clean up");
-                } else {
+                Class<Command> commandClazz = CommandHelper.getCommand(text);
+                if (commandClazz == null) {
+                    // Not a command. Evaluate the expression
                     try {
                         Number result = interpreter.interpret(text);
                         System.out.println(result);
                     } catch (Exception e) {
-                        System.out.println("Invalid expression!");
+                        System.out.println("Fail to interpret!");
                         e.printStackTrace();
                     }
+                } else if (commandClazz.equals(ExitCommand.class)) {
+                    ExitCommand.builder().exitCode(0).build()
+                            .execute();
+                } else if (commandClazz.equals(PrintVariablesCommand.class)) {
+                    PrintVariablesCommand.builder().varStore(interpreter.getVarStore()).build()
+                            .execute();
+                } else if (commandClazz.equals(CleanVariablesCommand.class)) {
+                    CleanVariablesCommand.builder().varStore(interpreter.getVarStore()).build()
+                            .execute();
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void cleanup() {
+        if (scanner != null) {
+            scanner.close();
+        }
+    }
+
+    private static void printInstructions() {
+        System.out.println("Please enter the expression here. "
+                + "The result of evaluation will be output after press enter.");
+        System.out.println(CommandHelper.getCommandDescription());
     }
 }

@@ -1,11 +1,13 @@
 package wsh.eval;
 
 import lombok.Getter;
+import wsh.eval.command.CommandHelper;
 import wsh.eval.exceptions.InvalidTokenException;
 import wsh.eval.token.Token;
 import wsh.eval.token.TokenType;
 
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Lexer process the input string to generate Tokens
@@ -13,6 +15,12 @@ import java.util.Optional;
  */
 @Getter
 public class Lexer {
+
+    /**
+     * Reserved keywords cannot be used as variable
+     */
+    private static final Set<String> RESERVE_KEYWORDS = CommandHelper.getCommandNames();
+
     /**
      * Input string
      */
@@ -158,13 +166,17 @@ public class Lexer {
      * Parse Variable name
      * @return variable name
      */
-    private String parseVariable() {
+    private String parseVariable() throws InvalidTokenException {
         StringBuilder sb = new StringBuilder();
         while (curChar != null && Character.isLetterOrDigit(curChar)) {
             sb.append(curChar);
             advance();
         }
-        return sb.toString();
+        String varName = sb.toString();
+        if (RESERVE_KEYWORDS.contains(varName)) {
+            throw new InvalidTokenException(varName + " is reserved keywords");
+        }
+        return varName;
     }
 
     private Token getMinusToken() {

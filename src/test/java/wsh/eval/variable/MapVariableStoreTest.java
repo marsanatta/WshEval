@@ -9,6 +9,7 @@ import wsh.eval.exceptions.VariableNotFoundException;
 import wsh.eval.number.Number;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -41,7 +42,8 @@ class MapVariableStoreTest {
         String varName2 = "b";
         varStore.set(varName1, Number.valueOf(1L));
         varStore.set(varName2, Number.valueOf(3.0));
-        varStore.clean();
+        Set<String> removedVarNames = varStore.clean();
+        assertEquals(Set.of(varName1, varName2), removedVarNames);
         assertThrows(VariableNotFoundException.class, () -> varStore.get(varName1));
         assertThrows(VariableNotFoundException.class, () -> varStore.get(varName2));
     }

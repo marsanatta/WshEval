@@ -196,4 +196,14 @@ class LexerTest {
         assertThrows(InvalidTokenException.class, () -> lexer.getToken());
     }
 
+    @Test
+    void testGetToken_ReservedKeywords() throws Exception {
+        String text = "a = vars + 1";
+        lexer.consume(text);
+        assertThrows(InvalidTokenException.class, () -> {
+            while (lexer.getToken().getType() != TokenType.EOF) {
+                lexer.getToken();
+            }
+        });
+    }
 }

@@ -3,6 +3,9 @@ package wsh.eval.variable;
 import wsh.eval.exceptions.VariableNotFoundException;
 import wsh.eval.number.Number;
 
+import java.util.Map;
+import java.util.Set;
+
 /**
  * Interface for variable store
  */
@@ -23,6 +26,7 @@ public interface VariableStore {
 
     /**
      * Remove all stored variables
+     * @return the removed variable names
      */
-    void clean();
+    Set<String> clean();
 }

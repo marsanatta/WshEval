@@ -8,13 +8,12 @@ import org.junit.jupiter.api.Test;
 import wsh.eval.module.InterpreterModule;
 import wsh.eval.number.Number;
 
-import java.math.BigDecimal;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
+@SuppressWarnings({"checkstyle:WhitespaceAround"})
 public class IntegrationTest {
-    private Injector injector = Guice.createInjector(new InterpreterModule());
+    private final Injector injector = Guice.createInjector(new InterpreterModule());
     private Interpreter interpreter;
 
     @BeforeEach

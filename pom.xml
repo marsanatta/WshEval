@@ -48,6 +48,11 @@
             <version>5.4.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.12</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -90,6 +95,7 @@
                         <exclude>**/test/**</exclude>
                         <exclude>wsh/eval/exceptions/**</exclude>
                         <exclude>wsh/eval/module/**</exclude>
+                        <exclude>wsh/eval/command/ExitCommand.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>

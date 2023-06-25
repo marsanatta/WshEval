@@ -3,8 +3,10 @@ package wsh.eval.variable;
 import wsh.eval.exceptions.VariableNotFoundException;
 import wsh.eval.number.Number;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Implementation of variable store using map
@@ -28,8 +30,10 @@ public class MapVariableStore implements VariableStore {
     }
 
     @Override
-    public void clean() {
+    public Set<String> clean() {
+        Set<String> varNames = new HashSet<>(map.keySet());
         map.clear();
+        return varNames;
     }
 
     @Override
