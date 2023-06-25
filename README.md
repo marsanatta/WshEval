@@ -17,9 +17,9 @@ It covers the numeric expression and supports variables in the expression
 
 ### How to use it?
 
-#### Main
+#### Console Prompt
 
-1. Create project with IntelliJ (File -> Project From Existing Source)
+1. Create project with IntelliJ (File -> Project From Existing Source -> Import from external module -> Maven)
 2. Make sure `src/main/java` is marked as source. `src/test/java` is marked as test
 3. Execute main program in the package: `wsh.eval.Main`
 

@@ -8,11 +8,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import wsh.eval.exceptions.InvalidTokenException;
 import wsh.eval.token.Token;
 import wsh.eval.token.TokenType;
-import wsh.eval.variable.MapVariableStore;
-import wsh.eval.variable.VariableStore;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
