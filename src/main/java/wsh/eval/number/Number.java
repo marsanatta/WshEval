@@ -20,14 +20,6 @@ public class Number {
         this.value = value;
     }
 
-    public NumberType getType() {
-        return type;
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
     public long longValue() {
         if (type == NumberType.LONG) {
             return (Long) value;
