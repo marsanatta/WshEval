@@ -20,6 +20,7 @@ import wsh.eval.number.Number;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -41,7 +42,6 @@ class InterpreterTest {
     @BeforeEach
     void setUp() {
         interpreter = Interpreter.builder()
-                .lexer(lexer)
                 .parser(parser)
                 .varStore(varStore)
                 .build();
@@ -399,18 +399,18 @@ class InterpreterTest {
     @Test
     void testInterpret() throws Exception {
         TreeNode node = mock();
-        when(parser.parse()).thenReturn(node);
+        when(parser.parse(anyString())).thenReturn(node);
         Number res = Number.valueOf(1L);
         when(node.accept(eq(interpreter))).thenReturn(res);
 
         String text = "a=1";
         assertEquals(res, interpreter.interpret(text));
-        verify(lexer, times(1)).consume(eq(text));
+        verify(parser, times(1)).parse(eq(text));
     }
 
     @Test
     void testInterpret_NullTree() throws Exception {
-        when(parser.parse()).thenReturn(null);
+        when(parser.parse(anyString())).thenReturn(null);
         assertNull(interpreter.interpret("a=1"));
     }
 }

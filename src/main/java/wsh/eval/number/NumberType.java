@@ -7,7 +7,7 @@ public enum NumberType {
 
     /**
      * When doing binary operator on two numbers.
-     * The result number type will be the one with higher rank between two.
+     * The result number type will be the one with higher rank
      */
     private final int rank;
 

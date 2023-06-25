@@ -23,7 +23,6 @@ public class InterpreterModule extends AbstractModule {
         Lexer lexer = new Lexer();
         Parser parser = new Parser(lexer);
         return Interpreter.builder()
-                .lexer(lexer)
                 .parser(parser)
                 .varStore(injector.getInstance(VariableStore.class))
                 .build();

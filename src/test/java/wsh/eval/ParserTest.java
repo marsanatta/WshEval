@@ -41,7 +41,7 @@ class ParserTest {
                 numToken,
                 EOF_TOKEN
         );
-        UnaryOpNode node = (UnaryOpNode) parser.parse();
+        UnaryOpNode node = (UnaryOpNode) parser.parse("mock");
         assertEquals(
                 UnaryOpNode.builder()
                         .op(op)
@@ -60,7 +60,7 @@ class ParserTest {
                 numToken,
                 EOF_TOKEN
         );
-        UnaryOpNode node = (UnaryOpNode) parser.parse();
+        UnaryOpNode node = (UnaryOpNode) parser.parse("mock");
         assertEquals(
                 UnaryOpNode.builder()
                         .op(op)
@@ -77,7 +77,7 @@ class ParserTest {
                 Token.builder().type(TokenType.ASSIGN).value("1").build(),
                 EOF_TOKEN
         );
-        assertThrows(InvalidSyntaxException.class, () -> parser.parse());
+        assertThrows(InvalidSyntaxException.class, () -> parser.parse("mock"));
     }
 
     @Test
@@ -87,7 +87,7 @@ class ParserTest {
                 numberToken,
                 EOF_TOKEN
         );
-        NumberNode node = (NumberNode) parser.parse();
+        NumberNode node = (NumberNode) parser.parse("mock");
         assertEquals(NumberNode.builder().token(numberToken).build(), node);
     }
 
@@ -100,7 +100,7 @@ class ParserTest {
                 varToken,
                 EOF_TOKEN
         );
-        VarNode node = (VarNode) parser.parse();
+        VarNode node = (VarNode) parser.parse("mock");
         assertEquals(VarNode.builder().token(varToken).build(), node);
     }
 
@@ -120,7 +120,7 @@ class ParserTest {
                 varToken,
                 EOF_TOKEN
         );
-        VarNode node = (VarNode) parser.parse();
+        VarNode node = (VarNode) parser.parse("mock");
         assertEquals(VarNode.builder().token(varToken)
                 .preIncrDecrToken(preIncrDecrToken).build(), node);
     }
@@ -141,7 +141,7 @@ class ParserTest {
                 postIncrDecrToken,
                 EOF_TOKEN
         );
-        VarNode node = (VarNode) parser.parse();
+        VarNode node = (VarNode) parser.parse("mock");
         assertEquals(VarNode.builder().token(varToken)
                 .postIncrDecrToken(postIncrDecrToken).build(), node);
     }
@@ -166,7 +166,7 @@ class ParserTest {
                 postIncrDecrToken,
                 EOF_TOKEN
         );
-        assertThrows(InvalidSyntaxException.class, () -> parser.parse());
+        assertThrows(InvalidSyntaxException.class, () -> parser.parse("mock"));
     }
 
     @Test
@@ -182,7 +182,7 @@ class ParserTest {
                 Token.builder().type(TokenType.RPAREN).build(),
                 EOF_TOKEN
         );
-        BinaryOpNode node = (BinaryOpNode) parser.parse();
+        BinaryOpNode node = (BinaryOpNode) parser.parse("mock");
         assertEquals(
                 BinaryOpNode.builder()
                         .left(NumberNode.builder().token(numToken1).build())
@@ -205,7 +205,7 @@ class ParserTest {
                 numToken2,
                 EOF_TOKEN
         );
-        assertThrows(InvalidSyntaxException.class, () -> parser.parse());
+        assertThrows(InvalidSyntaxException.class, () -> parser.parse("mock"));
     }
 
     @Test
@@ -219,7 +219,7 @@ class ParserTest {
                 numToken2,
                 EOF_TOKEN
         );
-        BinaryOpNode node = (BinaryOpNode) parser.parse();
+        BinaryOpNode node = (BinaryOpNode) parser.parse("mock");
         assertEquals(
                 BinaryOpNode.builder()
                         .left(NumberNode.builder().token(numToken1).build())
@@ -241,7 +241,7 @@ class ParserTest {
                 numToken2,
                 EOF_TOKEN
         );
-        BinaryOpNode node = (BinaryOpNode) parser.parse();
+        BinaryOpNode node = (BinaryOpNode) parser.parse("mock");
         assertEquals(
                 BinaryOpNode.builder()
                         .left(NumberNode.builder().token(numToken1).build())
@@ -263,7 +263,7 @@ class ParserTest {
                 numToken2,
                 EOF_TOKEN
         );
-        BinaryOpNode node = (BinaryOpNode) parser.parse();
+        BinaryOpNode node = (BinaryOpNode) parser.parse("mock");
         assertEquals(
                 BinaryOpNode.builder()
                         .left(NumberNode.builder().token(numToken1).build())
@@ -283,7 +283,7 @@ class ParserTest {
                 op,
                 EOF_TOKEN
         );
-        assertThrows(InvalidSyntaxException.class, () -> parser.parse());
+        assertThrows(InvalidSyntaxException.class, () -> parser.parse("mock"));
     }
 
     @Test
@@ -297,7 +297,7 @@ class ParserTest {
                 numToken2,
                 EOF_TOKEN
         );
-        BinaryOpNode node = (BinaryOpNode) parser.parse();
+        BinaryOpNode node = (BinaryOpNode) parser.parse("mock");
         assertEquals(
                 BinaryOpNode.builder()
                         .left(NumberNode.builder().token(numToken1).build())
@@ -319,7 +319,7 @@ class ParserTest {
                 numToken2,
                 EOF_TOKEN
         );
-        BinaryOpNode node = (BinaryOpNode) parser.parse();
+        BinaryOpNode node = (BinaryOpNode) parser.parse("mock");
         assertEquals(
                 BinaryOpNode.builder()
                         .left(NumberNode.builder().token(numToken1).build())
@@ -340,7 +340,7 @@ class ParserTest {
                 Token.builder().type(TokenType.ASSIGN).build(),
                 EOF_TOKEN
         );
-        assertThrows(InvalidSyntaxException.class, () -> parser.parse());
+        assertThrows(InvalidSyntaxException.class, () -> parser.parse("mock"));
     }
 
     @Test
@@ -349,7 +349,7 @@ class ParserTest {
                 Token.builder().type(TokenType.MUL).build(),
                 Token.builder().type(TokenType.VAR).value("name").build()
         );
-        assertThrows(InvalidSyntaxException.class, () -> parser.parse());
+        assertThrows(InvalidSyntaxException.class, () -> parser.parse("mock"));
     }
 
     @Test
@@ -364,7 +364,7 @@ class ParserTest {
                 EOF_TOKEN
         );
         when(lexer.getText()).thenReturn(varToken.getValue() + opToken.getValue() + numToken.getValue());
-        AssignOpNode node = (AssignOpNode) parser.parse();
+        AssignOpNode node = (AssignOpNode) parser.parse("mock");
         assertEquals(
                 AssignOpNode.builder()
                         .left(VarNode.builder().token(varToken).build())
@@ -387,7 +387,7 @@ class ParserTest {
                 EOF_TOKEN
         );
         when(lexer.getText()).thenReturn(varToken.getValue() + opToken.getValue() + numToken.getValue());
-        AssignOpNode node = (AssignOpNode) parser.parse();
+        AssignOpNode node = (AssignOpNode) parser.parse("mock");
         assertEquals(
                 AssignOpNode.builder()
                         .left(VarNode.builder().token(varToken).build())
@@ -410,7 +410,7 @@ class ParserTest {
                 EOF_TOKEN
         );
         when(lexer.getText()).thenReturn(varToken.getValue() + opToken.getValue() + numToken.getValue());
-        AssignOpNode node = (AssignOpNode) parser.parse();
+        AssignOpNode node = (AssignOpNode) parser.parse("mock");
         assertEquals(
                 AssignOpNode.builder()
                         .left(VarNode.builder().token(varToken).build())
@@ -433,7 +433,7 @@ class ParserTest {
                 EOF_TOKEN
         );
         when(lexer.getText()).thenReturn(varToken.getValue() + opToken.getValue() + numToken.getValue());
-        AssignOpNode node = (AssignOpNode) parser.parse();
+        AssignOpNode node = (AssignOpNode) parser.parse("mock");
         assertEquals(
                 AssignOpNode.builder()
                         .left(VarNode.builder().token(varToken).build())
@@ -456,7 +456,7 @@ class ParserTest {
                 EOF_TOKEN
         );
         when(lexer.getText()).thenReturn(varToken.getValue() + opToken.getValue() + numToken.getValue());
-        AssignOpNode node = (AssignOpNode) parser.parse();
+        AssignOpNode node = (AssignOpNode) parser.parse("mock");
         assertEquals(
                 AssignOpNode.builder()
                         .left(VarNode.builder().token(varToken).build())
@@ -479,7 +479,7 @@ class ParserTest {
                 EOF_TOKEN
         );
         when(lexer.getText()).thenReturn(varToken.getValue() + opToken.getValue() + numToken.getValue());
-        AssignOpNode node = (AssignOpNode) parser.parse();
+        AssignOpNode node = (AssignOpNode) parser.parse("mock");
         assertEquals(
                 AssignOpNode.builder()
                         .left(VarNode.builder().token(varToken).build())
@@ -502,7 +502,7 @@ class ParserTest {
                 EOF_TOKEN
         );
         when(lexer.getText()).thenReturn(varToken.getValue() + opToken.getValue() + notExprToken.getValue());
-        assertThrows(InvalidSyntaxException.class, () -> parser.parse());
+        assertThrows(InvalidSyntaxException.class, () -> parser.parse("mock"));
     }
 
     @Test
@@ -512,6 +512,6 @@ class ParserTest {
                 varToken
         );
         when(lexer.getText()).thenReturn(varToken.getValue());
-        assertThrows(InvalidSyntaxException.class, () -> parser.parse());
+        assertThrows(InvalidSyntaxException.class, () -> parser.parse("mock"));
     }
 }

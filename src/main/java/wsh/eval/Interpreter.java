@@ -30,14 +30,11 @@ import java.util.Set;
 public class Interpreter implements TreeVisitor {
 
     @NonNull
-    private final Lexer lexer;
-    @NonNull
     private final Parser parser;
     @NonNull
     private VariableStore varStore;
 
-    public Interpreter(@NonNull Lexer lexer, @NonNull Parser parser, @NonNull VariableStore varStore) {
-        this.lexer = lexer;
+    public Interpreter(@NonNull Parser parser, @NonNull VariableStore varStore) {
         this.parser = parser;
         this.varStore = varStore;
     }
@@ -145,8 +142,7 @@ public class Interpreter implements TreeVisitor {
 
     public Number interpret(String text) throws InvalidTokenException, InvalidSyntaxException,
             VariableNotFoundException {
-        lexer.consume(text);
-        TreeNode root = parser.parse();
+        TreeNode root = parser.parse(text);
         if (root == null) {
             return null;
         }

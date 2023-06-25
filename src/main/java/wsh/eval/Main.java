@@ -24,6 +24,7 @@ public class Main {
     private static Scanner scanner = null;
 
     public static void main(String[] args) {
+
         Runtime.getRuntime().addShutdownHook(new Thread(Main::cleanup));
         try (Scanner scanner = new Scanner(System.in)) {
             Injector injector = Guice.createInjector(new InterpreterModule());
