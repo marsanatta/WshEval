@@ -211,16 +211,4 @@ class LexerTest {
         });
     }
 
-    @Test
-    void test() throws Exception {
-        Lexer lexer = new Lexer();
-        Parser parser = new Parser(lexer);
-        VariableStore variableStore = new MapVariableStore();
-        Interpreter interpreter = new Interpreter(parser, variableStore);
-        // use interpret to evaluate an expression
-        interpreter.interpret("a=(1+2.3)*4.5E-6");
-        // use VariableStore to get the variable
-        wsh.eval.number.Number aVal = interpreter.getVarStore().get("a");
-        System.out.println(aVal);
-    }
 }

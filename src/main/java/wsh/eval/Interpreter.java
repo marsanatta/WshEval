@@ -2,24 +2,22 @@ package wsh.eval;
 
 import lombok.Builder;
 import lombok.Getter;
-import wsh.eval.ast.AssignOpNode;
-import wsh.eval.ast.BinaryOpNode;
-import wsh.eval.ast.NumberNode;
-import wsh.eval.ast.TreeNode;
-import wsh.eval.ast.TreeVisitor;
-import wsh.eval.ast.UnaryOpNode;
-import wsh.eval.ast.VarNode;
+import wsh.eval.tree.AssignOpNode;
+import wsh.eval.tree.BinaryOpNode;
+import wsh.eval.tree.NumberNode;
+import wsh.eval.tree.TreeNode;
+import wsh.eval.tree.TreeVisitor;
+import wsh.eval.tree.UnaryOpNode;
+import wsh.eval.tree.VarNode;
 import wsh.eval.exceptions.InvalidSyntaxException;
 import wsh.eval.exceptions.UnknownTokenTypeException;
 import wsh.eval.number.Number;
 import wsh.eval.token.Token;
-import wsh.eval.token.TokenType;
 import wsh.eval.variable.VariableStore;
 import lombok.NonNull;
 import wsh.eval.exceptions.InvalidTokenException;
 import wsh.eval.exceptions.VariableNotFoundException;
 
-import java.util.Set;
 
 /**
  * Interpreter interprets the Abstracted Syntax Tree (AST) generated from the Parser

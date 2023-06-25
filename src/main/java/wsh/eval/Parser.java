@@ -1,12 +1,12 @@
 package wsh.eval;
 
 import lombok.NonNull;
-import wsh.eval.ast.TreeNode;
-import wsh.eval.ast.AssignOpNode;
-import wsh.eval.ast.BinaryOpNode;
-import wsh.eval.ast.NumberNode;
-import wsh.eval.ast.UnaryOpNode;
-import wsh.eval.ast.VarNode;
+import wsh.eval.tree.TreeNode;
+import wsh.eval.tree.AssignOpNode;
+import wsh.eval.tree.BinaryOpNode;
+import wsh.eval.tree.NumberNode;
+import wsh.eval.tree.UnaryOpNode;
+import wsh.eval.tree.VarNode;
 import wsh.eval.exceptions.InvalidSyntaxException;
 import wsh.eval.exceptions.InvalidTokenException;
 import wsh.eval.token.Token;

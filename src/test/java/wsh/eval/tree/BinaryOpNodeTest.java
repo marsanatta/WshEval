@@ -1,4 +1,4 @@
-package wsh.eval.ast;
+package wsh.eval.tree;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

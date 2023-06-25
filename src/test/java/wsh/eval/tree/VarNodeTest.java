@@ -1,10 +1,8 @@
-package wsh.eval.ast;
+package wsh.eval.tree;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import wsh.eval.exceptions.BuildNumberNodeException;
 import wsh.eval.exceptions.BuildVarNodeException;
 import wsh.eval.number.Number;
 import wsh.eval.token.Token;

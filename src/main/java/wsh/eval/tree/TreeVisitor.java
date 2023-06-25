@@ -1,4 +1,4 @@
-package wsh.eval.ast;
+package wsh.eval.tree;
 
 import wsh.eval.exceptions.VariableNotFoundException;
 import wsh.eval.number.Number;

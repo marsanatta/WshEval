@@ -1,23 +1,23 @@
-package wsh.eval.ast;
+package wsh.eval.tree;
 
+import wsh.eval.token.Token;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import wsh.eval.exceptions.VariableNotFoundException;
-import wsh.eval.token.Token;
 import wsh.eval.number.Number;
 
 /**
- * Binary operator node
- * It's a operator node that consists of the binary operator (+,-,*,/,%)
- * and two expr on left and right which the operator operates
+ * Assign operator node
+ * It's an operator node that consists of the assign operator (=,+=,-=,*=,/=,%=)
+ * ,a var node to be assigned and expr node represents the value to be assigned to
  */
 @Getter
 @Builder
-public class BinaryOpNode implements TreeNode {
+public class AssignOpNode implements TreeNode {
 
     @NonNull
-    private final TreeNode left;
+    private final VarNode left;
     @NonNull
     private final Token op;
     @NonNull
@@ -25,13 +25,13 @@ public class BinaryOpNode implements TreeNode {
 
     @Override
     public Number accept(TreeVisitor visitor) throws VariableNotFoundException {
-        return visitor.visitBinaryOpNode(this);
+        return visitor.visitAssignOpNode(this);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof BinaryOpNode) {
-            BinaryOpNode another = (BinaryOpNode) obj;
+        if (obj instanceof AssignOpNode) {
+            AssignOpNode another = (AssignOpNode) obj;
             return left.equals(another.left) && op.equals(another.op) && right.equals(another.right);
         } else {
             return false;

@@ -1,4 +1,4 @@
-package wsh.eval.ast;
+package wsh.eval.tree;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
