@@ -21,7 +21,7 @@ c *= (a+b)*10
   - e.g. `12E3`, `12e+3`, `12.3e-4`
 - Support integer, float, arbitrary-precision signed decimal number, auto type conversion
 - Support expression validations
-  - Invalid number format e.g. `00123`, `123.123`, `1.1E2E3` 
+  - Invalid number format e.g. `00123`, `1.2.3`, `1.1E2E3` 
   - Reserved keywords
   - Invalid characters in the expression
   - Invalid syntax
