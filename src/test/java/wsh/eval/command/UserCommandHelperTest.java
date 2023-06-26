@@ -6,29 +6,29 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class CommandHelperTest {
+class UserCommandHelperTest {
 
     @Test
     void getCommandNames() {
-        Set<String> commandNames = CommandHelper.getCommandNames();
+        Set<String> commandNames = UserCommandHelper.getUserCommandNames();
         assertEquals(Set.of("vars", "exit", "clean"), commandNames);
     }
 
     @Test
     void getCommand_vars() {
-        Class<Command> clazz = CommandHelper.getCommand("vars");
+        Class<Command> clazz = UserCommandHelper.getUserCommand("vars");
         assertEquals(clazz, PrintVariablesCommand.class);
     }
 
     @Test
     void getCommand_clean() {
-        Class<Command> clazz = CommandHelper.getCommand("clean");
+        Class<Command> clazz = UserCommandHelper.getUserCommand("clean");
         assertEquals(clazz, CleanVariablesCommand.class);
     }
 
     @Test
     void getCommand_exit() {
-        Class<Command> clazz = CommandHelper.getCommand("exit");
+        Class<Command> clazz = UserCommandHelper.getUserCommand("exit");
         assertEquals(clazz, ExitCommand.class);
     }
 
@@ -37,6 +37,6 @@ class CommandHelperTest {
         assertEquals("Supported Commands:\n"
                 + " -exit: Exit the program\n"
                 + " -vars: Print variables\n"
-                + " -clean: Remove all variables\n", CommandHelper.getCommandDescription());
+                + " -clean: Remove all variables\n", UserCommandHelper.getUserCommandDescription());
     }
 }

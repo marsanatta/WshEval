@@ -2,6 +2,8 @@ package wsh.eval;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.name.Names;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +20,7 @@ public class IntegrationTest {
 
     @BeforeEach
     public void setup() {
-        interpreter = injector.getInstance(Interpreter.class);
+        interpreter = injector.getInstance(Key.get(Interpreter.class, Names.named("ConsolePrompt")));
     }
 
     @Test

@@ -9,6 +9,8 @@ import wsh.eval.exceptions.InvalidTokenException;
 import wsh.eval.token.Token;
 import wsh.eval.token.TokenType;
 
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
@@ -198,7 +200,8 @@ class LexerTest {
 
     @Test
     void testGetToken_ReservedKeywords() throws Exception {
-        String text = "a = vars + 1";
+        lexer = new Lexer(Set.of("reserved"));
+        String text = "a = reserved + 1";
         lexer.consume(text);
         assertThrows(InvalidTokenException.class, () -> {
             while (lexer.getToken().getType() != TokenType.EOF) {

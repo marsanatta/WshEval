@@ -1,7 +1,7 @@
 package wsh.eval.command;
 
 /**
- * Command to bridge between the Interpreter client and the Interpreter for decoupling and reuse
+ * Console prompt commands
  */
 public interface Command {
 

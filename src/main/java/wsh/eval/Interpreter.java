@@ -27,8 +27,15 @@ import wsh.eval.exceptions.VariableNotFoundException;
 @Getter
 public class Interpreter implements TreeVisitor {
 
+    /**
+     * Parser to be used
+     */
     @NonNull
     private final Parser parser;
+
+    /**
+     * Variable storage to be access
+     */
     @NonNull
     private VariableStore varStore;
 
@@ -37,6 +44,12 @@ public class Interpreter implements TreeVisitor {
         this.varStore = varStore;
     }
 
+    /**
+     * Handle binary operator node
+     * @param node binary operator node
+     * @return result
+     * @throws VariableNotFoundException unknown variable in the expression
+     */
     @Override
     public Number visitBinaryOpNode(BinaryOpNode node) throws VariableNotFoundException {
         Number left = node.getLeft().accept(this);
@@ -58,6 +71,12 @@ public class Interpreter implements TreeVisitor {
         }
     }
 
+    /**
+     * Handle unary operator node
+     * @param node bunary operator node
+     * @return result
+     * @throws VariableNotFoundException unknown variable in the expression
+     */
     @Override
     public Number visitUnaryOpNode(UnaryOpNode node) throws VariableNotFoundException {
         Token op = node.getOp();
@@ -72,12 +91,17 @@ public class Interpreter implements TreeVisitor {
         }
     }
 
+    /**
+     * Handle number node
+     * @param node number node
+     * @return result
+     */
     @Override
-    public Number visitAssignOpNode(AssignOpNode assignOpNode) throws VariableNotFoundException {
-        String varName = assignOpNode.getLeft().getVarName();
-        Token op = assignOpNode.getOp();
+    public Number visitAssignOpNode(AssignOpNode node) throws VariableNotFoundException {
+        String varName = node.getLeft().getVarName();
+        Token op = node.getOp();
         Number newVarValue;
-        TreeNode rightExpr = assignOpNode.getRight();
+        TreeNode rightExpr = node.getRight();
         switch (op.getType()) {
             case ASSIGN:
                 newVarValue = rightExpr.accept(this);
@@ -104,11 +128,22 @@ public class Interpreter implements TreeVisitor {
         return newVarValue;
     }
 
+    /**
+     * Handle number node
+     * @param node number node
+     * @return result
+     */
     @Override
     public Number visitNumberNode(NumberNode node) {
         return node.getNumber();
     }
 
+    /**
+     * Get new variable value with the pre/post increment/decrement operators
+     * @param op operator token
+     * @param varValue original variable value
+     * @return new variable value
+     */
     private Number getNewVarValue(Token op, Number varValue) {
         switch (op.getType()) {
             case DOUBLE_PLUS:
@@ -120,6 +155,12 @@ public class Interpreter implements TreeVisitor {
         }
     }
 
+    /**
+     * Handle variable node
+     * @param varNode variable node
+     * @return result
+     * @throws VariableNotFoundException unknown variable in the expression
+     */
     @Override
     public Number visitVarNode(VarNode varNode) throws VariableNotFoundException {
         String varName = varNode.getVarName();
@@ -138,6 +179,14 @@ public class Interpreter implements TreeVisitor {
         return evalValue;
     }
 
+    /**
+     * Interpret the given text
+     * @param text input text
+     * @return evaluation result
+     * @throws InvalidTokenException invalid token exception
+     * @throws InvalidSyntaxException invalid syntax exception
+     * @throws VariableNotFoundException variable not found exception
+     */
     public Number interpret(String text) throws InvalidTokenException, InvalidSyntaxException,
             VariableNotFoundException {
         TreeNode root = parser.parse(text);
