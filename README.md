@@ -4,9 +4,17 @@ WshEval is a evaluator for Java-like expression.
 It covers the numeric expression and supports variables in the expression
 
 ```
-a = (1+2)*(3-4)
-b = ++a
-c *= (a+b)*10
+a = 1+2*3.0-4/3%2
+b = - - -(+(-a))
+c = (1+2)*(((3)-4)*6)
+d = ++a - c--
+d += a
+d *= b
+d -= c
+d /= 2.1
+d %= 3.4
+f = 1.2e+333 * 1.4e+555 / d % -(5.6e-222 + 7.8e333)"
+b += ((a+b) * 30 % 2 + -(+-+-+(b-a)*9e-2 + 1.1e+2 - --a)) / (b++ * 9)
 ```
 
 ### Features
