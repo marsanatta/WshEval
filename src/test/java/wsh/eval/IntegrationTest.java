@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import wsh.eval.exceptions.InvalidSyntaxException;
+import wsh.eval.exceptions.InvalidTokenException;
+import wsh.eval.exceptions.VariableNotFoundException;
 import wsh.eval.module.InterpreterModule;
 import wsh.eval.number.Number;
 
@@ -108,7 +110,8 @@ public class IntegrationTest {
      * Paul's case
      */
     @Test
-    public void test5() {
+    public void test5() throws Exception {
+        interpreter.interpret("a=1");
         assertThrows(InvalidSyntaxException.class, () -> interpreter.interpret("++a=0"));
         assertThrows(InvalidSyntaxException.class, () -> interpreter.interpret("--a=0"));
         assertThrows(InvalidSyntaxException.class, () -> interpreter.interpret("a++=0"));
