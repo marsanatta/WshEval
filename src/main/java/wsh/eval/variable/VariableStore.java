@@ -3,7 +3,6 @@ package wsh.eval.variable;
 import wsh.eval.exceptions.VariableNotFoundException;
 import wsh.eval.number.Number;
 
-import java.util.Map;
 import java.util.Set;
 
 /**

@@ -107,7 +107,6 @@ class ParserTest {
     @Test
     void testParse_Factor_VariableNode_PreIncrDecrToken() throws Exception {
         String varName = "a";
-        when(lexer.getText()).thenReturn(varName);
         Token preIncrDecrToken = Token.builder()
                 .type(TokenType.DOUBLE_PLUS)
                 .build();
@@ -149,7 +148,6 @@ class ParserTest {
     @Test
     void testParse_Factor_VariableNode_HashBothPrePostIncrDecrToken() throws Exception {
         String varName = "a";
-        when(lexer.getText()).thenReturn(varName);
         Token preIncrDecrToken = Token.builder()
                 .type(TokenType.DOUBLE_PLUS)
                 .build();

@@ -7,6 +7,7 @@ import com.google.inject.name.Names;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import wsh.eval.exceptions.InvalidSyntaxException;
 import wsh.eval.module.InterpreterModule;
 import wsh.eval.number.Number;
 
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @SuppressWarnings({"checkstyle:WhitespaceAround"})
@@ -100,6 +102,14 @@ public class IntegrationTest {
                                 .add(new BigDecimal("7.8e333")).negate()
                 );
         assertEquals(Number.valueOf(f), interpreter.getVarStore().get("f"));
+    }
+
+    /**
+     * Paul's case
+     */
+    @Test
+    public void test5() {
+        assertThrows(InvalidSyntaxException.class, () -> interpreter.interpret("++a=0"));
     }
 
 }

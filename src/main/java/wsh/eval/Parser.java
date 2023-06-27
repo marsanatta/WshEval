@@ -200,9 +200,7 @@ public class Parser {
     public TreeNode parse(String text) throws InvalidTokenException, InvalidSyntaxException {
         lexer.consume(text);
         this.curToken = lexer.getToken(); // set initial token
-        boolean isAssignExpr =
-                (TOKEN_TYPE_UNARY_INCR_DECR_SET.contains(curToken.getType()) || curToken.getType() == TokenType.VAR)
-                && lexer.getText().contains("=");
+        boolean isAssignExpr = curToken.getType() == TokenType.VAR && lexer.getText().contains("=");
         TreeNode root;
         if (isAssignExpr) {
             root = parseAssignExpr();
