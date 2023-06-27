@@ -210,13 +210,14 @@ class NumberTest {
 
     @Test
     void testValueOfString_NumberFloatOverflow() {
-        String num = BigDecimal.valueOf(Double.MAX_VALUE).add(new BigDecimal("1.1")).toString();
+        String num = BigDecimal.valueOf(Double.MAX_VALUE).add(new BigDecimal("1.0E1000")).toString();
         assertEquals(Number.valueOf(new BigDecimal(num)), Number.valueOf(num));
     }
 
     @Test
     void testValueOfString_NumberFloatUnderflow() throws Exception {
-        String num = (BigDecimal.valueOf(Double.MIN_VALUE).divide(BigDecimal.TEN, RoundingMode.HALF_UP)).toString();
+        String num = (BigDecimal.valueOf(Double.MIN_VALUE)
+                .divide(new BigDecimal("1.0e-1000"), RoundingMode.HALF_UP)).toString();
         assertEquals(Number.valueOf(new BigDecimal(num)), Number.valueOf(num));
     }
 
@@ -246,14 +247,16 @@ class NumberTest {
 
     @Test
     void testValueOfString_NumberIntegerOverflow() {
-        String num = (BigDecimal.valueOf(Long.MAX_VALUE).add(BigDecimal.ONE)).toString();
-        assertEquals(Number.valueOf(new BigDecimal(num)), Number.valueOf(num));
+        Double d = (double) Long.MAX_VALUE + 1.0;
+        String num = d.toString();
+        assertEquals(Number.valueOf(d), Number.valueOf(num));
     }
 
     @Test
     void testValueOfString_NumberIntegerUnderflow() {
-        String num = (BigDecimal.valueOf(Long.MIN_VALUE).subtract(BigDecimal.ONE)).toString();
-        assertEquals(Number.valueOf(new BigDecimal(num)), Number.valueOf(num));
+        Double d = (double) Long.MIN_VALUE - 1.0;
+        String num = d.toString();
+        assertEquals(Number.valueOf(d), Number.valueOf(num));
     }
 
     @Test

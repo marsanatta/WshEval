@@ -16,7 +16,7 @@ public class PrintVariablesCommand implements Command {
 
     @Override
     public void execute() {
-        System.out.println(varStore);
+        System.out.println(varStore.variablesToString());
     }
 
 }

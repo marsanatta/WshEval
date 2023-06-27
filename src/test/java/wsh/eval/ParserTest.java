@@ -506,7 +506,7 @@ class ParserTest {
     }
 
     @Test
-    void testParse_NotEndWithEOL() throws Exception {
+    void testParse_NotEndWithEOF() throws Exception {
         Token varToken = Token.builder().type(TokenType.VAR).value("a").build();
         when(lexer.getToken()).thenReturn(
                 varToken

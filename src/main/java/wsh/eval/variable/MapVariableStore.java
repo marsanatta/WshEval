@@ -37,7 +37,7 @@ public class MapVariableStore implements VariableStore {
     }
 
     @Override
-    public String toString() {
+    public String variablesToString() {
         StringBuilder sb = new StringBuilder("(");
         for (Map.Entry<String, Number> e : map.entrySet()) {
             sb.append(e).append(',');

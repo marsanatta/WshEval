@@ -49,13 +49,13 @@ class MapVariableStoreTest {
     }
 
     @Test
-    void testToString() {
+    void testVariablesToString() {
         String varName1 = "a";
         String varName2 = "b";
         String varName3 = "c";
         varStore.set(varName1, Number.valueOf(1L));
         varStore.set(varName2, Number.valueOf(3.0));
         varStore.set(varName3, Number.valueOf(new BigDecimal("2.1e+9")));
-        assertEquals("(a=1(LONG),b=3.0(DOUBLE),c=2.1E+9(BIG_DECIMAL))", varStore.toString());
+        assertEquals("(a=1(LONG),b=3.0(DOUBLE),c=2.1E+9(BIG_DECIMAL))", varStore.variablesToString());
     }
 }

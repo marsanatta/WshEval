@@ -174,23 +174,23 @@ public class Number {
     }
 
     public static Number valueOf(String numStr) {
-        BigDecimal bigDecimal = new BigDecimal(numStr);
-        if (bigDecimal.scale() > 0 || numStr.toLowerCase().contains("e")) {
-            int compareMax = bigDecimal.compareTo(BIG_DECIMAL_MAX_DOUBLE);
-            int compareMin = bigDecimal.compareTo(BIG_DECIMAL_MIN_DOUBLE);
-            boolean isOverflow = compareMax > 0 || compareMin < 0;
-            if (isOverflow) {
-                return Number.valueOf(bigDecimal);
-            } else {
-                return Number.valueOf(bigDecimal.doubleValue());
+        try {
+            return Number.valueOf(Long.parseLong(numStr));
+        } catch (NumberFormatException e) {
+            // handle by following conversion
+        }
+        try {
+            double doubleValue = Double.parseDouble(numStr);
+            if (!Double.isInfinite(doubleValue)) {
+                return Number.valueOf(doubleValue);
             }
-        } else {
-            try {
-                return Number.valueOf(bigDecimal.longValueExact());
-            } catch (ArithmeticException e) {
-                // overflow
-                return Number.valueOf(bigDecimal);
-            }
+        } catch (NumberFormatException e) {
+            // handle by following conversion
+        }
+        try {
+            return Number.valueOf((new BigDecimal(numStr)));
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid numeric format: " + numStr);
         }
     }
 

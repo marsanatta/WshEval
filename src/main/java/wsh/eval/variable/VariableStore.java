@@ -29,4 +29,10 @@ public interface VariableStore {
      * @return the removed variable names
      */
     Set<String> clean();
+
+    /**
+     * Convert variables to string
+     * @return string
+     */
+    String variablesToString();
 }
