@@ -183,7 +183,7 @@ public class Parser {
             case VAR:
             case DOUBLE_PLUS: // pre increment
             case DOUBLE_MINUS: // pre decrement
-                return parseVariable();
+                return parseVariableWithUnaryIncrDecrOperator();
             default:
                 throw new InvalidSyntaxException(
                         String.format("Encounter invalid token %s while parsing. Expect a factor", curToken)
@@ -222,7 +222,7 @@ public class Parser {
      * @throws InvalidTokenException input has invalid token
      * @throws InvalidSyntaxException input has invalid syntax
      */
-    private VarNode parseVariable() throws InvalidTokenException, InvalidSyntaxException {
+    private VarNode parseVariableWithUnaryIncrDecrOperator() throws InvalidTokenException, InvalidSyntaxException {
         VarNode.Builder varNodeBuilder = VarNode.builder();
         // parse pre-increment/decrement operator
         Token preIncrDecrToken = null;
@@ -235,7 +235,6 @@ public class Parser {
         Token varToken = eat(TokenType.VAR);
         varNodeBuilder
                 .token(varToken);
-
         // parse post-increment/decrement operator
         if (TOKEN_TYPE_UNARY_INCR_DECR_SET.contains(curToken.getType())) {
             if (preIncrDecrToken != null) {
@@ -248,6 +247,19 @@ public class Parser {
             varNodeBuilder.postIncrDecrToken(postIncrDecrToken);
         }
         return varNodeBuilder.build();
+    }
+
+    /**
+     * Parse tokens to generate a variable node.
+     * @return A variable node
+     * @throws InvalidTokenException input has invalid token
+     * @throws InvalidSyntaxException input has invalid syntax
+     */
+    private VarNode parseVariable() throws InvalidTokenException, InvalidSyntaxException {
+        Token varToken = eat(TokenType.VAR);
+        return VarNode.builder()
+                .token(varToken)
+                .build();
     }
 
 }

@@ -110,6 +110,9 @@ public class IntegrationTest {
     @Test
     public void test5() {
         assertThrows(InvalidSyntaxException.class, () -> interpreter.interpret("++a=0"));
+        assertThrows(InvalidSyntaxException.class, () -> interpreter.interpret("--a=0"));
+        assertThrows(InvalidSyntaxException.class, () -> interpreter.interpret("a++=0"));
+        assertThrows(InvalidSyntaxException.class, () -> interpreter.interpret("a--=0"));
     }
 
 }
