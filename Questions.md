@@ -1,7 +1,7 @@
 ### Question3
 #### Features
 1. Configure max size of the cache to safeguard memory usage
-    - LRU/LRU eviction
+    - LRU/LFU eviction
 2. Support expiration
 3. Support configure cache loader as the entry loader when cache miss
 4. Support refresh entry
